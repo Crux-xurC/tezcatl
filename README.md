@@ -18,6 +18,8 @@ Browser (Tezcatl: CodeMirror / xterm.js)
 The browser never talks to Emacs, a PTY, the disk or a language server directly; one Elixir
 relay owns each connection and multiplexes the windows.
 
+What it looks like: [Xipe Totec's README](https://github.com/Crux-xurC/xipe_totec#readme) has a screenshot and a 3.5-minute video of an AI agent trying a library's functions over MCP, with tezcatl as the window.
+
 ## What it is not
 
 - not a re-implementation of Emacs, an IDE, Git, LSP, an LLM or vterm

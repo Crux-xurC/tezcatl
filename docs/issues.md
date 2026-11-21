@@ -59,6 +59,12 @@ Open:
 - Every E2E scenario of [test/e2e/README.md](../test/e2e/README.md), each on a fresh stack (scenarios run one after another can
   disturb each other: pages left open answer `intent.run`); those with a password through a test account (`E2E_DB_USER`,
   `TEZCATL_E2E_DB_PASSWORD`); `decode_emacs_magit.mjs` and `magit_*.mjs` with `stack.sh emacs`
+- **Before tezcatlipoca 0.2.0 (2026-11-21)**: after the approval view and the generalized backends, unit 640, relay 234, and on fresh
+  stacks `xipe_approve`, `matrix_set`, `matrix_commands`, `xipe_rows`, `radar`, `suggestion_list`, `xipe_skin`, `xipe_input`,
+  `xipe_cards` (the stack with and without a `stack.local.sh`); without Nix, tezcatl_without_nix's relay 234 and browser 627,
+  xipe_totec_without_nix's 693 of 694 (the one needs embody beside the checkout, as in CI); the tarball unpacked elsewhere: `check`,
+  and its Xipe Totec over `xipe mcp` (a proposal, a person's approval, an evaluation). Released as tezcatlipoca 0.2.0, every component
+  tagged `v0.2.0` (poca and emacs-vent at their locked commits). Not run: the whole E2E list again, Poca's window (no display here)
 - **Run 2026-11-21 at 872a09a (Xipe Totec 67f31c3, then 3d180e9), all passed** after the fixes found in it: unit 637, relay 233, every E2E scenario on a
   fresh stack (72 runs; the Magit ones with `stack.sh emacs`, `secret_gate` with `E2E_SECRET`; the database ones without
   `TEZCATL_E2E_DB_PASSWORD`, so their logged-in parts and `sql_socket` not run; `poca_gate` not run: no `poca`, `Xvfb`, `openbox` on
