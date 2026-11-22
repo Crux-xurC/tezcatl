@@ -64,7 +64,10 @@
     var text = payload && typeof payload === 'object' ? payload.text : payload;
     if (typeof text !== 'string' || !text) return;
     ring = ring.filter(function (e) { return e.text !== text; });
-    ring.unshift({
+    // at: where it goes (0, the first, by default). The matrix's CSV path goes
+    // second so that what the person yanked last stays first (D-matrix-csv)
+    var at = payload && typeof payload === 'object' && Number.isInteger(payload.at) && payload.at > 0 ? payload.at : 0;
+    ring.splice(Math.min(at, ring.length), 0, {
       id: mkId(), text: text,
       source: (payload && payload.source) || null, ts: Date.now(),
     });

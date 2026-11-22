@@ -1,1 +1,1 @@
-{"name":"main","type":"A","axis":"h","ratio":[1],"focus":"11","columns":[[["image",1,1,true,false]]]}
+{"name":"main","type":"A","axis":"v","ratio":[1],"focus":"12","columns":[[["image",1,1,false,false],["skin_list",2,1,true]]],"dock":{"side":"b","size":{"b":"40%","r":"40%"}}}

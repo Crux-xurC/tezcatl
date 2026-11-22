@@ -2,7 +2,7 @@
 
 The generic, backend-agnostic grid engine behind panels/resident/matrix.html (matrix.html section, design).
 
-**Decisions homed here**: [D-matrix-shell](#d-matrix-shell)
+**Decisions homed here**: [D-matrix-shell](#d-matrix-shell), [D-matrix-csv](#d-matrix-csv)
 
 **Takes part in**: [D-references](lib-skin-recv-refs.js.md#d-references), [D-xipe-approval](lib-xipe-xipe-classes.js.md#d-xipe-approval)
 
@@ -15,7 +15,7 @@ them. How Xipe Totec's data is fetched and what it means are in an adapter per `
 
 - **Inside the shell**: cursor moves (hjkl), visual selection of cells, row selection from the gutter of row numbers
   (`selection.scope: "row" | "cell"`), sorting, filtering (`/`; expressions read by a small parser, never evaluated as JS), colours (`c`
-  then `b`/`r`/`y`, `w` clears), CSV, yank (`y` → `killring.add`)
+  then `b`/`r`/`y`, `w` clears), CSV ([D-matrix-csv](#d-matrix-csv)), yank (`y` → `killring.add`)
 - **What leaves the shell**: opening a place (`g d`), and the coordinate of the selection to `cursor` (`D-references`; the earlier
   `matrix.action {chord, selection}` was removed). What a key means is a translation layer's (`matrix_bindings.json`, empty for now)
 - **Colours are kept by row id and column key** (`~work/store/matrix-colors.json`, `D-store` = `{rowId: {colKey: "b"|"r"|"y"}}`), never
@@ -53,3 +53,24 @@ reinvent the wheel.
 **Files**: `panels/resident/matrix.html`, `lib/xipe/matrix-grid.js`, `lib/xipe/matrix-page.js`, `lib/xipe/xipe-rows.js`,
 `lib/xipe/xipe-place.js`, `lib/xipe/xipe-client.js`, `lib/xipe/matrix-commands.js`, `lib/list/kinds/xipe_cards.js`,
 `list_kinds/xipe_cards.json`, `matrix_bindings.json`.
+
+<a id="d-matrix-csv"></a>
+
+## D-matrix-csv — the CSV link writes a file through the relay, says where, and puts its path second in the killring
+
+**Decided** (2026-11-23): the header's `CSV` link (`lib/xipe/matrix-page.js`) writes the table as shown (sorted, filtered) with
+`PUT /fs/write` at the top of the FS root, as `<kind>_<ref>-<YYYYMMDD-HHMMSS>.csv` (`csvFileName` in `lib/xipe/matrix-data.js`),
+never over a file (`x-tezcatl-base: absent`). The header says the path, or why it was not written; the path goes into the killring
+**second** (`killring.add {at: 1}`).
+
+- **Why not a download**: Poca refuses every download (its pledge; `CanDownload` answers no), so the earlier Blob link did nothing in
+  Poca, the browser tezcatl opens in. Writing through the relay works in any browser and lands where tezcatl's files and terminals
+  already are
+- **At the top of the FS root**: the relay makes no directories there (`write_file` in `lib/relay/fs_handler.exs`: only the work
+  place's are made), and a directory of its own would need one. The time in the name keeps files apart; `absent` keeps a file of
+  the same name
+- **Second in the killring**: what the person yanked last stays first, so `p` (or a terminal's paste) still gives what they copied;
+  a vim user would otherwise find their copy replaced by a path they did not yank
+
+**Alternatives**: Poca allowing downloads into a directory (loosens Poca's pledge); a directory such as `tezcatl-export/` (the relay
+would have to make directories in the FS root); the path first in the killring; the CSV text itself into the killring.

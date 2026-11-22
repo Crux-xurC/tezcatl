@@ -3,7 +3,8 @@
 // place, written here), one row each, by name: lines (empty ones), axis, ratios,
 // panels, and a panel kept under an old name (code_vi) marked; Enter opens the
 // skin in a new frame window; inside a frame, M-r reads it into that frame
-// (skin.read), where code_vi is code_editor; a skin saved meanwhile appears.
+// (skin.read), where code_vi is code_editor; a skin saved meanwhile appears;
+// the shipped skins (skins/index.json) are rows too, marked [skins/].
 import fs from 'node:fs';
 import path from 'node:path';
 import { openPage, attachTo, PAGES, check, done } from './cdp.mjs';
@@ -30,6 +31,10 @@ check(text.indexOf(WIDE + '4 lines (3 empty) · axis h · 1:1:1:1 · killring | 
       /4 lines \(3 empty\) · axis h · 1:1:1:1 · killring \| \(empty\) \| \(empty\) \| \(empty\)/.test(text), 'a row: lines, the empty ones, axis, ratios, panels');
 check(/2 lines · axis h · 1:4 · tree \| code_vi\s+⚠ old name: code_vi → code_editor/.test(text), 'a panel kept under an old name is marked (code_vi → code_editor)');
 check(text.indexOf(OLD) < text.indexOf(WIDE), 'by name');
+// the shipped skins (skins/index.json) after the saved ones, marked by where they are
+check(/demo\[skins\/\] 1 line · axis v · 1 · xterm, matrix_set/.test(text) || /\[skins\/\] 1 line · axis v · 1 · xterm, matrix_set/.test(text),
+  'a shipped skin as a row, marked [skins/] (demo)');
+check(/vibe_coding/.test(text) && /agenda/.test(text), 'the other shipped skins too (vibe_coding, agenda)');
 
 // Enter: a new frame window with that skin
 await p.eval(`(() => { const f = document.getElementById('filter'); f.focus(); f.value = ${JSON.stringify(WIDE)}; f.dispatchEvent(new Event('input')); return true; })()`);

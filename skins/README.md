@@ -15,8 +15,21 @@ Skins saved with `skin save` in the frame (`panels/skins/frame.html`), the ones 
 
 Only names usable as file names (letters, digits, `_` `.` `-`) are read from files.
 
+## The ones shipped, and `index.json`
+
+| Skin | What |
+|---|---|
+| `main` | `main.html`'s: the picture, and below it the `skin_list` panel (every skin there is; Enter opens one) |
+| `demo` | a terminal above a `matrix_set` (Xipe Totec's rows as a table): the layout of Xipe Totec's demo video |
+| `vibe_coding` | Claude Code (`claude`) at the left; the file tree and the killring at the right |
+| `agenda` | a note's table as a table (`task_table`) |
+
+The pages are served as files and a directory cannot be listed, so `index.json` names the skins here: the `skin_list` panel reads
+it (and `local/skins/index.json`, if you keep one there) to show them. A skin added here goes into `index.json` too
+(`test/list-kinds.test.js` checks the two agree).
+
 ## Now and when publishing
 
 - Skins built now may live in the browser through `skin save`; looks only for you go under `local/` (skins, panels and CSS)
-- When publishing, the skins to ship are written from `skin save`'s JSON into `skins/<name>.json`. An LCARS look is not shipped; it is shown
+- When publishing, the skins to ship are written from `skin save`'s JSON into `skins/<name>.json`, and named in `index.json`. An LCARS look is not shipped; it is shown
   as pictures or video of real use, leaving to each user whether to make it LCARS

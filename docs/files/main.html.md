@@ -7,7 +7,7 @@ The page of Tezcatl.
 ## Now (2026-10-24)
 
 main.html shows nothing of its own: an `<iframe id="frame">` holds `panels/skins/frame.html?skin=main` — the saved skin `skins/main.json`,
-the dock and an image panel (the Tezcatlipoca picture) — and it still hosts the daemon and opens `ui.startup.windows`. What it showed
+the dock, an image panel (the Tezcatlipoca picture) and below it the `skin_list` panel (the skins there are, so the shipped ones are seen) — and it still hosts the daemon and opens `ui.startup.windows`. What it showed
 before (the brand, the form, the list of pages) is the panel `pages` (`list.html?config=panels_and_skins`) and `launcher.html`; the form's
 `launcher.fill` has no taker now. A startup window blocked is said on a line over the frame (`#err`): main.html is no panel of the frame,
 so the frame's receiving side does not take its `recv.say`.

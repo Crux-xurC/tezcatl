@@ -62,7 +62,7 @@ cd /path/to/xipe_totec && elixir main.exs start --port 4200 \
 
 ## 2. Open a screen
 
-`main.html` is a frame of its own: the main skin (`skins/main.json`, the dock and an image panel). From its input line, or any frame's,
+`main.html` is a frame of its own: the main skin (`skins/main.json`, the dock, an image panel and the `skin_list` panel: the skins there are, Enter opens one). From its input line, or any frame's,
 `open <name> [tab|window]` opens a page. The list of every page is the panel `pages` (`skin add pages`; `Enter` opens, `M-t` in a tab,
 `M-w` in a window), or `launcher.html`. Without `tab` or `window`, `launcher.open-mode` of
 `config.json` decides. In Poca a window works like a tab (Poca's own `Ctrl+N` opens an empty Poca window).
@@ -161,7 +161,7 @@ column (area) then the position (`skin focus 2 3`, `skin del 2 3`).
 | `go on` | to what the last line with `@…` on the receiving side points at ("References" below) |
 | `radar` | the current selection of the table used last, as a line with a reference (§9) |
 | `skin name <name>` / `skin save [name]` / `skin read <name>` | name it / save / open (`frame.html?skin=<name>` too). This name (`workspace_N` until named) is the window's name |
-| `skin add skin_list` | the saved skins as a list: lines (empty ones), axis, ratios, panels; a panel saved under an old name (`code_vi`) is marked. `Enter` opens one in a new frame window, `M-r` reads it into the frame focused last (`skin.read`) |
+| `skin add skin_list` | the saved skins as a list, then the shipped ones (`skins/`: main, demo, vibe_coding, agenda) and your own files (`local/skins/`), marked by where they are: lines (empty ones), axis, ratios, panels; a panel saved under an old name (`code_vi`) is marked. `Enter` opens one in a new frame window, `M-r` reads it into the frame focused last (`skin.read`) |
 
 A frame being worked on is kept per window (a reload shows the same). The files open in `code_editor` are not kept.
 
@@ -871,6 +871,8 @@ From the frame's input line (any window):
 | `db list open` / `db list close` | the list of database windows at the bottom of the dock made larger / back to one line; `Del` on a row logs that window out |
 
 In the table: `hjkl` move, `v` select, `y` yank, `/` filter, a click on a heading sorts, `c` then `b`/`r`/`y` colours, `w` clears.
+`CSV` in the heading writes the table as shown to a file at the top of the FS root (`<kind>_<ref>-<time>.csv`; Poca refuses
+downloads, so it is not one) and says where; the path goes into the killring second, so what you yanked last stays first.
 In the table of rows (`xipe_rows`), `g` `d` goes to the definition of the row's function (an open `code_editor` if one has it; inside a
 frame a `code_editor` is added; otherwise a new window — the heading says where). Rows are as of the last scan. A project outside the FS
 root cannot be opened (said so). A row whose `node` is `gone` lost its function in a scan (make it again). Long values are cut; with

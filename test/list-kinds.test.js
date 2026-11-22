@@ -689,6 +689,49 @@ test('skin_list: a saved skin as a row ── lines (empty ones), axis, ratios, 
   assert.equal(k._toItem('x', null).sub, '0 lines · axis h · - · ');
 });
 
+test('skin_list: skins of files after the saved ones ── a name once (saved, local/skins, skins), a file row says where', () => {
+  const k = kinds.skin_list;
+  const one = (p) => ({ axis: 'h', ratio: [1], columns: [[[p, 1, 1, true]]] });
+  const items = k._toItems({ main: one('tree') }, [
+    { name: 'main', json: one('image'), from: 'skins' },
+    { name: 'demo', json: one('xterm'), from: 'local/skins' },
+    { name: 'demo', json: one('matrix_set'), from: 'skins' },
+    { name: 'agenda', json: one('task_table'), from: 'skins' },
+  ]);
+  assert.deepEqual(items.map((i) => i.id), ['agenda', 'demo', 'main']);
+  assert.equal(items[0].sub, '[skins/] 1 line · axis h · 1 · task_table');
+  assert.equal(items[1].sub, '[local/skins/] 1 line · axis h · 1 · xterm');
+  assert.equal(items[1].raw.from, 'local/skins');
+  assert.equal(items[2].sub, '1 line · axis h · 1 · tree');
+  assert.equal(items[2].raw.from, undefined);
+});
+
+test('skin_list: the files listed ── each directory\'s index.json, then its files; no index or no file: nothing', async () => {
+  const k = kinds.skin_list;
+  const realFetch = global.fetch;
+  const served = {
+    '/skins/index.json': ['agenda', 'gone', '../x'],
+    '/skins/agenda.json': { columns: [[['task_table', 1, 1, true]]] },
+  };
+  const asked = [];
+  global.fetch = (u) => { asked.push(u); return Promise.resolve(served[u] ? { ok: true, json: () => Promise.resolve(served[u]) } : { ok: false }); };
+  try {
+    const files = await k._filesListed((rel) => '/' + rel);
+    assert.deepEqual(files.map((f) => [f.name, f.from]), [['agenda', 'skins']]);
+    assert.ok(asked.indexOf('/local/skins/index.json') >= 0);
+    assert.ok(!asked.some((u) => u.indexOf('..') >= 0), 'a name that is not a file name is not asked for');
+  } finally { global.fetch = realFetch; }
+});
+
+test('skins/index.json names every skins/<name>.json, and each file is the skin of its name', () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const dir = path.join(__dirname, '..', 'skins');
+  const files = fs.readdirSync(dir).filter((f) => f.endsWith('.json') && f !== 'index.json').map((f) => f.slice(0, -5)).sort();
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(dir, 'index.json'), 'utf8')).slice().sort(), files);
+  for (const n of files) assert.equal(JSON.parse(fs.readFileSync(path.join(dir, n + '.json'), 'utf8')).name, n);
+});
+
 test('skin_list.onKey: M-r reads the skin through skin.read; a name with a blank is not sent', () => {
   const k = kinds.skin_list;
   const calls = [];

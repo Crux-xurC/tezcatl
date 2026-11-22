@@ -364,3 +364,12 @@ test('cursorValue: the full value of the cursor cell, null on the gutter', () =>
   g.handleKey(k('l'));
   assert.deepEqual(g.cursorValue(), { column: 'result', value: 'x' });
 });
+
+test('csvFileName: <kind>_<ref>-<local time>.csv at the top of the FS root; no / nor leading dots (D-matrix-csv)', () => {
+  const D = require('../lib/xipe/matrix-data.js');
+  const at = new Date(2026, 10, 23, 9, 5, 7);
+  assert.equal(D.csvFileName('xipe_rows', 'all', at), 'xipe_rows_all-20261123-090507.csv');
+  assert.equal(D.csvFileName('xipe_rows', 'Calc.add/2', at), 'xipe_rows_Calc.add_2-20261123-090507.csv');
+  assert.equal(D.csvFileName(null, '../x y', at), '__x_y-20261123-090507.csv');
+  assert.equal(D.csvFileName(null, null, at), 'matrix-20261123-090507.csv');
+});

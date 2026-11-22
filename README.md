@@ -53,6 +53,7 @@ embody for Linux x86_64 (or [tezcatl_without_nix](https://github.com/Crux-xurC/t
 
 | You want to | Read |
 |---|---|
+| see the usual questions and first concerns answered (Why Emacs? Why Poca? Is localhost safe?) — start here when assessing it | [docs/faq.md](docs/faq.md) |
 | use it day to day | [docs/how-to-use.md](docs/how-to-use.md) |
 | add a command, an intent, a panel, a language … | [docs/extending.md](docs/extending.md) — a table: what to write, where, which test guards it |
 | know what is promised to work, and what happens outside | [docs/scope.md](docs/scope.md) — each promise with a one-line why and the file records that hold the details |

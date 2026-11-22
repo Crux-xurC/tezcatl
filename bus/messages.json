@@ -175,8 +175,8 @@
 
     { "name": "killring", "scope": "notice", "from": "every panel (panel-frame: the killring key, Escape y)", "to": "the basic skin", "payload": "{reason, origin}",
       "desc": "open the kill ring picker", "note": "the type comes from panel-frame's key table, not a literal post" },
-    { "name": "killring.add", "scope": "notice", "from": "code_editor, panel-frame (the clipboard mirror), the matrix, xterm, code_vi_minimum (:m with no one asking)", "to": "the killring service", "payload": "{text, source}",
-      "desc": "add this text to the kill ring" },
+    { "name": "killring.add", "scope": "notice", "from": "code_editor, panel-frame (the clipboard mirror), the matrix, xterm, code_vi_minimum (:m with no one asking)", "to": "the killring service", "payload": "{text, source, at?}",
+      "desc": "add this text to the kill ring: first, or at the place `at` (the matrix's CSV path goes second, D-matrix-csv)" },
     { "name": "killring.done", "scope": "notice", "from": "the killring list kind", "to": "the basic skin", "payload": "{originId}",
       "desc": "the picker is done: back to where it was opened" },
     { "name": "killring.list", "scope": "reply", "from": "the killring service", "to": "the killring and dict list kinds", "payload": "{items}",
