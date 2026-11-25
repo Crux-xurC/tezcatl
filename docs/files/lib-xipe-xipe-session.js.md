@@ -25,6 +25,12 @@ Emacs' keymaps. Whether a line answers a dialogue or is a command is Xipe Totec'
   by `backend.data` (an answer's `result.data`), `backend.line` (a line sent as if typed) and `backend.prefill` (put in the input for a
   person to send), each with `{backend}`. A second window for another backend would be the same code twice
 
+- **A ticket on every (re)connect** ([D-poca-secret](lib-relay-secret_gate.exs.md#d-poca-secret)): like `lib/core/ws.js`, the
+  session asks `lib/core/ticket.js` for a one-shot ticket before each handshake, so a relay started by Poca lets it in; every page
+  that uses it loads `ticket.js` (the dialogue window, matrix_bar, the dock's xipe target). Until 2026-11-25 it did not: under Poca
+  the dock's `;i i`, the dialogue window and a matrix_set's `xipe` line only went "connecting, closed" again and again
+  (`secret_gate.mjs` checks it now)
+
 **Alternatives**: turn the CLI's notation into commands in the browser; make people type JSON-RPC; a dedicated method listing commands
 (`command/list`) for completion.
 

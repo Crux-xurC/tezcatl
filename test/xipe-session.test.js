@@ -135,3 +135,18 @@ test('relayXipeUrl:connections[0].url with /xipe as the path', () => {
   assert.equal(xipeSession.relayXipeUrl({ connections: [{ url: 'ws://127.0.0.1:4100/' }] }, '/other'), 'ws://127.0.0.1:4100/other');
   assert.throws(() => xipeSession.relayXipeUrl({}), /connections\[0\]\.url/);
 });
+
+test('every (re)connect takes a new ticket, and the socket opens with it (D-poca-secret)', async () => {
+  const urls = [];
+  let n = 0;
+  class WS { constructor(u) { urls.push(u); this.u = u; setTimeout(() => this.onclose && this.onclose(), 0); } send() {} close() {} }
+  const s = xipeSession.create({
+    url: 'ws://x/xipe', on: {}, WebSocket: WS, reconnectMs: 5,
+    ticket: (u) => Promise.resolve(u + '?ticket=t' + (++n)),
+  });
+  await new Promise((r) => setTimeout(r, 40));
+  s.close();
+  assert.ok(urls.length >= 2, 'it reconnected: ' + urls.length);
+  assert.equal(urls[0], 'ws://x/xipe?ticket=t1');
+  assert.equal(urls[1], 'ws://x/xipe?ticket=t2');
+});

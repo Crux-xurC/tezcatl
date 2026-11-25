@@ -126,7 +126,8 @@ lines from "Build" on are these).
 
 - `;i` → the list of destinations; a letter chooses one and goes back to the input line: `t` tezcatl, `e` Emacs (emacs-vent),
   `c` a `code_editor` of the frame, `x` an `xterm` of the frame, `f` another frame — another tab or window, Poca's split view: the line
-  runs there as if typed in its own input line (`c1` `c2`, `f1` `f2` when there are several). A click works too
+  runs there as if typed in its own input line (`c1` `c2`, `f1` `f2` when there are several), `i` Xipe Totec (the line goes as the
+  dialogue window sends it; §9). A click works too
 - Keys you cannot type are written `;` and one letter: `;c` Ctrl, `;a` Alt (Meta), `;s` Shift (on a key that is not a character),
   `;w` Super go with the next key (`;cx` = `C-x`, `;c;ax` = `C-M-x`). `;h` `;j` `;k` `;l` arrows, `;e` Return, `;q` Esc, `;t` Tab,
   `;b` Backspace, `;d` Delete, `;f5` F5 (`;f-` `;f=` are F11, F12)
@@ -231,7 +232,8 @@ In the standard layout the suggestions are under the input line, their source to
   to the suggestions. When the input does not go to tezcatl, `lines` is dimmed
 - **Where the receiving side reads** (`;o` too): `t` tezcatl (commands and answers), `e` emacs-vent (context and events),
   `x` xterm (a terminal's output as lines of text — to watch a small terminal), `f` another frame (what it says: sending to it with
-  `;i f`, its answers come here). A letter chooses and goes back to the input line.
+  `;i f`, its answers come here), `i` Xipe Totec (the lines sent to it from the dock or a matrix_set's `xipe <line>`, and their
+  answers). A letter chooses and goes back to the input line.
   **While in the input line (and the suggestions) it follows where the input goes** (sending to an xterm shows its output).
   The first line says whose lines they are. A tezcatl error is put in whatever is shown
 
@@ -824,6 +826,14 @@ Xipe Totec decides the target (`xipe choice project`). Tezcatl is the window and
 - Restarting Xipe Totec keeps the window usable (the record shows `# reattached`); a line waiting for an answer gets none
 - Changes made with `xipe` in a terminal are taken by the server at its next request
 
+### Without the dialogue window
+
+The same lines go from the frame's dock: `;i i` makes Xipe Totec the destination of the input line (the project `.` of `xipe.json`),
+and the receiving side, following it, shows the line and its answer. In a `matrix_set`, `xipe <line>` sends `<line>` to the root of the
+table shown (the first line of the answer on the band; all of it in the frame's receiving side, `;o i`). Both wait in `work` like the
+dialogue window's lines, and `@` is the last reference. The dialogue window keeps what they lack: the dictionary, the whole record, the
+`notify/*` lines ([D-xipe-elsewhere](files/lib-xipe-xipe-line.js.md#d-xipe-elsewhere)).
+
 ### Table (`matrix`)
 
 The table above, a command line below (`Ctrl-Enter`). The table does not change by itself.
@@ -834,6 +844,7 @@ The table above, a command line below (`Ctrl-Enter`). The table does not change 
 | `matrix get <path>` | fetch that table: `xipe_rows:all` (every row), `xipe_rows:call_ids=<id>,<id>`, `xipe:module=Calc&name=add&arity=2` (one function) |
 | `matrix pwd` | the current table's path |
 | `matrix approve` | on `xipe_classes:all`: approve the classes of the rows selected (the cursor's row, or a selection) |
+| `xipe <line>` | send `<line>` to Xipe Totec, to the root of the table shown, as the dialogue window would (`xipe eval @` after `radar`); the table is not fetched again by itself |
 
 **Approving an AI agent's classes.** Xipe Totec evaluates a function only after a person classified it (`pure`, `reads`, `writes`). An
 agent using Xipe Totec over MCP (`xipe mcp`) can only propose a class, with a one-line reason; a function a person had classified and
@@ -892,6 +903,19 @@ To put the selected rows into a line of the dialogue window, two steps:
   dialogue, so to send a lone `@` as a value (OCaml's `[1] @ [2]`) write it without blanks (`[1]@[2]`)
 
 ---
+
+### Citlalpol's records (`citlalpol_bus`, `citlalpol_log`, `citlalpol_image`)
+
+If you run programs inside forbidden's wall with Citlalpol behind its door (separate tools: `citl run …`), its records can be watched
+here. In a frame: `skin add citlalpol_bus`, then `skin add citlalpol_log` and/or `skin add citlalpol_image` — the log and the picture take
+the records of the bus of their own skin (without one they say so). The bus line shows whether records flow and whether citld runs.
+
+- `citlalpol_log`: one row a record (time, decision, protocol, destination, request, command, result, access.json, run). New ones are
+  added at the bottom; `p` pauses and goes on, `Enter` shows the record in full; `/` filters, sorting, colours and `y` as in a matrix
+- `citlalpol_image`: each record travels as a glyph from tezcatl (the satellite) to Citlalpol (Venus): on to the Internet (the Earth) when
+  passed, back when a stand-in answered, stopped with ✕ when refused. Several at once show a circled count. The glyphs are
+  `citlalpol.json`'s
+- Nothing here changes Citlalpol: what may pass is its `access.json`, edited by you ([D-citlalpol-bus](files/lib-citlalpol-citlalpol-bus-page.js.md#d-citlalpol-bus))
 
 ## 10. Settings files
 

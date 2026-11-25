@@ -113,7 +113,7 @@ const q = await openPage(PAGES + 'panels/skins/frame.html');
 await q.waitFor(`/ready|empty\./.test(document.getElementById('recv').textContent)`, 15000);
 await wait(800);
 const other = await line('who', 1800, q);
-const mine = (await p.eval(`document.title`)).replace('Tezcatl — ', '');
+const mine = (await p.eval(`document.title`)).replace(/ — Tezcatl$/, '');
 // (by the code_editor's own name: windows other scenarios left open may be called workspace_1 too)
 const codeName = await p.eval(`window.frameSkin.frameAt('11').contentWindow.Tezcatl.bus.self.name`);
 check(new RegExp('code ' + codeName + ' +' + mine + ' 1 1').test(other), "another window's who: the first frame's code_editor, with its place: " + (other.match(/.*code .* 1 1.*/) || [''])[0]);

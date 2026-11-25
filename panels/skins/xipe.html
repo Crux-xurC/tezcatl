@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <link rel="stylesheet" href="../../lib/core/fonts.css">
-<title>Tezcatl — xipe skin</title>
+<title>xipe skin — Tezcatl</title>
 <style>
 
   :root {
@@ -40,6 +40,7 @@
 <script src="../../lib/core/panel-frame.js"></script>
 <script src="../../lib/core/commands.js"></script>
 <script src="../../lib/core/panes.js"></script>
+<script src="../../lib/core/ticket.js"></script>
 <script src="../../lib/xipe/xipe-session.js"></script>
 <script src="../../lib/xipe/xipe-transcript.js"></script>
 <script src="../../lib/skin/skin-dict.js"></script>
@@ -71,7 +72,7 @@
   var xipeRoot = q.get('root') || '.';
   var dictList = q.get('dict') || backend;
   if (backend !== 'xipe') {
-    document.title = 'Tezcatl — ' + backend + ' skin';
+    document.title = backend + ' skin — Tezcatl';
     document.querySelector('#bar b').textContent = 'Tezcatl · ' + backend;
   }
   var statusEl = document.getElementById('status');

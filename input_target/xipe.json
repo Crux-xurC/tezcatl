@@ -1,0 +1,8 @@
+{
+  "label": "xipe",
+  "desc": "Xipe Totec (the project \".\" of xipe.json): a line as the dialogue window sends it -- `input` {text}, unread (D-xipe-elsewhere). A line of chars only. Its answers are the receiving side's xipe source.",
+  "scripts": [
+    "lib/core/ticket.js", "lib/xipe/xipe-session.js", "lib/xipe/xipe-transcript.js", "lib/skin/recv-refs.js", "lib/skin/radar.js",
+    "lib/xipe/xipe-line.js", "lib/target/xipe.js"
+  ]
+}

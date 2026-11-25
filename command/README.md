@@ -236,7 +236,9 @@ way (`tree at 2 1`, the map, `@2 1`).
 
 **The command line of `matrix_set`** (a synthesis — `syntheses/matrix_set.json`, run by `lib/xipe/matrix-bar-page.js`; it replaced the matrix skin; syntax `lib/xipe/matrix-commands.js`; the leading `matrix` may be left out): `matrix update`,
 `matrix get <path>`, `matrix pwd`, `matrix approve` — the same as 2.1's `matrix.*`. Also `radar` (this table's selection becomes "the last reference"; the band
-shows `radar ── <table path>  <type>  [<columns>]  @<id>` — `lib/skin/radar.js`).
+shows `radar ── <table path>  <type>  [<columns>]  @<id>` — `lib/skin/radar.js`), and `xipe <line>` (`<line>` goes to Xipe Totec, to the root of the
+table shown, as the dialogue window sends it — `@` is the last reference; the first line of the answer on the band, all of it the frame's
+xipe source; `lib/xipe/xipe-line.js`, `D-xipe-elsewhere`).
 
 **The dialogue window** (`panels/skins/xipe.html`): lines go to Xipe Totec as they are, except that a lone `@` is replaced, before sending,
 by the last reference (a `radar` typed in any window; `radar` → `eval @`). An `@` inside a word stays; without a reference the line is not

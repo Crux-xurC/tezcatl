@@ -12,6 +12,10 @@ before (the brand, the form, the list of pages) is the panel `pages` (`list.html
 `launcher.fill` has no taker now. A startup window blocked is said on a line over the frame (`#err`): main.html is no panel of the frame,
 so the frame's receiving side does not take its `recv.say`.
 
+**The tab's title is the frame's** (2026-11-24): main.html copies the frame's `<title>` (the skin's name, which `skin name` / `skin read`
+change) and follows it with a MutationObserver — with several Tezcatl tabs open, every tab read "Tezcatl". Every page's title puts its
+own name first (`<name> — Tezcatl`, e.g. `main — Tezcatl`, `xipe skin — Tezcatl`), so a narrow tab still shows what it is.
+
 The notes below are of the page before.
 
 ## Notes from verification

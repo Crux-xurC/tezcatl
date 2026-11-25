@@ -56,7 +56,7 @@ const box = (place) => p.eval(`(() => {
 console.log('frame skin');
 const s0 = await st();
 check(/^workspace_\d+$/.test(s0.name) && s0.type === 'A' && JSON.stringify(names(s0)) === '[[]]', 'starts empty as workspace_N (A): ' + s0.name);
-check(await p.eval(`Tezcatl.bus.whoami().name`) === s0.name && (await p.eval(`document.title`)).endsWith(s0.name), '...and that is the name of the window (the bus, the title)');
+check(await p.eval(`Tezcatl.bus.whoami().name`) === s0.name && (await p.eval(`document.title`)).startsWith(s0.name + " — "), '...and that is the name of the window (the bus, the title)');
 check(/empty\./.test(await p.eval(`document.getElementById('recv').textContent`)), '...and the receiving side says how to add a panel');
 
 check(/C \(1 : 2 : 1\)/.test(await line('skin main 1,2,1')), 'skin main 1,2,1 -> C');

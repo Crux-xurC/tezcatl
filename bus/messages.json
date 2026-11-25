@@ -393,7 +393,7 @@
     { "name": "work.who.end", "scope": "notice", "from": "who (lib/skin/work-commands.js)", "to": "the work store", "payload": "{req}",
       "desc": "the roll call is over: answer with the roster", "filter": "req" },
 
-    { "name": "xipe.answered", "scope": "notice", "from": "the xipe skin", "to": "the work store (pair xipe)", "payload": "{req, ok}",
+    { "name": "xipe.answered", "scope": "notice", "from": "the xipe skin, lib/xipe/xipe-line.js (input_target's xipe, matrix_bar's xipe <line>)", "to": "the work store (pair xipe)", "payload": "{req, ok}",
       "desc": "Xipe Totec answered the line req", "note": "no taker in the pages but the work store (work.json)" },
     { "name": "backend.data", "scope": "notice", "from": "the window of another backend (panels/skins/xipe.html?backend=<name>)", "to": "a page of that backend's own", "payload": "{backend, data}",
       "desc": "an answer's structured data (its text is never read); D-xipe-relay", "filter": "the page: backend is its own" },
@@ -403,8 +403,18 @@
       "desc": "put this line in the input, for a person to send", "filter": "the window: backend is its own", "note": "never sent by itself" },
     { "name": "xipe.input", "scope": "notice", "from": "code_xipe_in", "to": "the xipe skin", "payload": "{text}",
       "desc": "a line to send to Xipe Totec", "filter": "the xipe skin: its own input pane" },
-    { "name": "xipe.sent", "scope": "notice", "from": "the xipe skin", "to": "the work store (pair xipe)", "payload": "{req}",
+    { "name": "xipe.sent", "scope": "notice", "from": "the xipe skin, lib/xipe/xipe-line.js (input_target's xipe, matrix_bar's xipe <line>)", "to": "the work store (pair xipe)", "payload": "{req}",
       "desc": "a line went to Xipe Totec", "note": "no taker in the pages but the work store (work.json)" },
+    { "name": "citlalpol.record", "scope": "notice", "from": "citlalpol_bus", "to": "citlalpol_log, citlalpol_image of the same skin", "payload": "{n, r}",
+      "desc": "a new record of Citlalpol (r: its JSON line as it is; n: the bus's own count); D-citlalpol-bus", "filter": "the takers: from a citlalpol_bus among their siblings" },
+    { "name": "citlalpol.state", "scope": "notice", "from": "citlalpol_bus", "to": "citlalpol_log, citlalpol_image of the same skin", "payload": "{citld, count}",
+      "desc": "whether citld runs, how many records so far", "filter": "the takers: from a citlalpol_bus among their siblings" },
+    { "name": "citlalpol.ask", "scope": "ask", "from": "citlalpol_log, citlalpol_image (on opening, until answered)", "to": "citlalpol_bus of the same skin", "payload": "{req}", "reply": "citlalpol.records",
+      "desc": "what the bus keeps, for a panel opened later", "filter": "the bus: the asker is its sibling" },
+    { "name": "citlalpol.records", "scope": "reply", "from": "citlalpol_bus", "to": "the asker (to)", "payload": "{req, records: [{n, r}], citld}",
+      "desc": "the records kept (the last of citlalpol.json's keep)" },
+    { "name": "xipe.said", "scope": "notice", "from": "input_target (lib/target/xipe.js), matrix_bar (xipe <line>)", "to": "output_target (lib/recv/xipe.js)", "payload": "{lines, kind, root, [skin]}",
+      "desc": "a line sent to Xipe Totec outside the dialogue window, or what came back (kind sent | reply | info | notify), as the dialogue window's record shows it; D-xipe-elsewhere", "filter": "output_target: its own skin's (a sibling, or skin the same skin page's bus id; any, alone in a window); notify left out" },
 
     { "name": "yield", "scope": "notice", "from": "every panel (panel-frame: the leave key, Escape Escape)", "to": "the skins", "payload": "{reason, origin}",
       "desc": "the leave key was pressed in a panel: back to the skin", "filter": "the skin whose window has the focus", "note": "the type comes from panel-frame's key table, not a literal post" }

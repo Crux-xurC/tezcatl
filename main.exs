@@ -32,6 +32,7 @@ Code.require_file("lib/relay/xipe_conn.exs", __DIR__)
 Code.require_file("lib/relay/xipe_registry.exs", __DIR__)
 Code.require_file("lib/relay/xipe_socket.exs", __DIR__)
 Code.require_file("lib/relay/sql.exs", __DIR__)
+Code.require_file("lib/relay/citlalpol_records.exs", __DIR__)
 
 browser_port = String.to_integer(System.get_env("TEZCATL_RELAY_PORT") || "4100")
 
@@ -114,6 +115,7 @@ dispatch =
        {"/sql", SqlSocket, []},
        {"/sql/windows", SqlWindowsHandler, []},
        {"/ticket", TicketHandler, []},
+       {"/citlalpol/records", CitlalpolHandler, []},
      ] ++
        # other JSON-RPC servers relayed as /xipe is: one route a name of this
        # machine's backends.json (D-xipe-relay)

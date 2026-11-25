@@ -1,0 +1,5 @@
+{
+  "label": "xipe",
+  "desc": "Xipe Totec: the lines this skin sent to it outside the dialogue window (the dock's input line, a matrix_set's `xipe <line>`) and their answers, as the dialogue window's record shows them (xipe.said; D-xipe-elsewhere). One, always there.",
+  "scripts": ["lib/recv/xipe.js"]
+}

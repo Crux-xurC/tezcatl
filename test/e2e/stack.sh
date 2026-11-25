@@ -139,11 +139,12 @@ EOF
   # The settings go *inside* `nix develop --command`, after the shellHook: the
   # hook sources this machine's local.env (e.g. TEZCATL_FS_ROOT=~/projects),
   # which would otherwise replace them and point the test relay at real files
-  # (TEZCATL_MIRROR_DIR, TEZCATL_WORK_DIR and TEZCATL_IDS_DIR too: the copies, the work place and the id lists of the tests stay in $E2E_DIR).
+  # (TEZCATL_MIRROR_DIR, TEZCATL_WORK_DIR and TEZCATL_IDS_DIR too: the copies, the work place and the id lists of the tests stay in $E2E_DIR;
+  # CITLALPOL_STATE / CITLALPOL_RUNTIME: Citlalpol's records the scenarios write there, never this machine's own).
   # The database (D-db-backend): local.env's MariaDB account (E2E_DB_USER: another one, e.g. an account made for the
   # tests only), but always its database tezcatl_e2e, never tezcatl.
   start relay bash -c "cd '$tz' && exec nix develop --command env TEZCATL_RELAY_PORT=$RELAY_PORT TEZCATL_VENT_PORT=$VENT_PORT \
-    TEZCATL_FS_ROOT='$E2E_DIR/fsroot' TEZCATL_MIRROR_DIR='$E2E_DIR/mirror' TEZCATL_WORK_DIR='$E2E_DIR/work' TEZCATL_IDS_DIR='$E2E_DIR/ids' TEZCATL_DB_NAME=tezcatl_e2e ${E2E_DB_USER:+TEZCATL_DB_USER='$E2E_DB_USER'} TEZCATL_ALLOWED_ORIGINS=http://127.0.0.1:$PAGES_PORT XIPE_TOTEC_LSP=off \
+    TEZCATL_FS_ROOT='$E2E_DIR/fsroot' TEZCATL_MIRROR_DIR='$E2E_DIR/mirror' TEZCATL_WORK_DIR='$E2E_DIR/work' TEZCATL_IDS_DIR='$E2E_DIR/ids' CITLALPOL_STATE='$E2E_DIR/citlalpol' CITLALPOL_RUNTIME='$E2E_DIR/citlalpol-run' TEZCATL_DB_NAME=tezcatl_e2e ${E2E_DB_USER:+TEZCATL_DB_USER='$E2E_DB_USER'} TEZCATL_ALLOWED_ORIGINS=http://127.0.0.1:$PAGES_PORT XIPE_TOTEC_LSP=off \
     TEZCATL_AUTH=off POCA_SECRET='${E2E_SECRET:-}' \
     bash -c \"cd '$E2E_DIR/relay' && exec elixir main.exs\""
   start_fake

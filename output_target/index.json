@@ -4,6 +4,7 @@
     { "id": "tezcatl", "letter": "t" },
     { "id": "emacs-vent", "letter": "e" },
     { "id": "xterm", "letter": "x" },
-    { "id": "frame", "letter": "f" }
+    { "id": "frame", "letter": "f" },
+    { "id": "xipe", "letter": "i" }
   ]
 }

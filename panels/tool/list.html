@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <link rel="stylesheet" href="../../lib/core/fonts.css">
-<title>Tezcatl — list</title>
+<title>list — Tezcatl</title>
 <link rel="stylesheet" href="../../lib/core/tezcatl.css">
 <style>
   
@@ -93,7 +93,7 @@
   }).then(function (doc) {
     cfg = doc || {};
     titleEl.textContent = cfg.title || configName;
-    document.title = 'Tezcatl — ' + (cfg.title || configName);
+    document.title = (cfg.title || configName) + ' — Tezcatl';
     // only the kind shown is read (lib/list/kinds/<kind>.js)
     return Tezcatl.listKinds.load(cfg.kind).then(function (k) {
       kind = k;

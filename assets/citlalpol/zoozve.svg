@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640" role="img" aria-labelledby="title desc">
+  <title id="title">Zoozve — stylized asteroid</title>
+  <desc id="desc">A simplified, irregular grey rocky body with a softly faceted silhouette and stylized impact craters on a clean white background.</desc>
+  <defs>
+    <clipPath id="bodyClip">
+      <path d="M320 62
+        C367 57 407 72 447 94
+        C493 119 527 153 548 196
+        C571 241 579 283 568 327
+        C559 370 534 412 501 448
+        C467 486 422 517 377 539
+        C337 559 291 567 250 555
+        C205 542 164 522 128 491
+        C91 459 65 420 53 375
+        C40 330 44 282 57 237
+        C70 191 93 150 128 118
+        C163 86 207 69 252 64
+        C278 61 299 64 320 62 Z"/>
+    </clipPath>
+    <linearGradient id="rock" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d8d8d5"/>
+      <stop offset=".48" stop-color="#a9aaa7"/>
+      <stop offset="1" stop-color="#777b79"/>
+    </linearGradient>
+    <linearGradient id="light" x1="0" y1="0" x2=".9" y2="1">
+      <stop offset="0" stop-color="#f0f0ec" stop-opacity=".72"/>
+      <stop offset="1" stop-color="#f0f0ec" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="shadow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#555b5a" stop-opacity="0"/>
+      <stop offset="1" stop-color="#454a49" stop-opacity=".58"/>
+    </linearGradient>
+  </defs>
+
+  
+  <path d="M320 62
+    C367 57 407 72 447 94
+    C493 119 527 153 548 196
+    C571 241 579 283 568 327
+    C559 370 534 412 501 448
+    C467 486 422 517 377 539
+    C337 559 291 567 250 555
+    C205 542 164 522 128 491
+    C91 459 65 420 53 375
+    C40 330 44 282 57 237
+    C70 191 93 150 128 118
+    C163 86 207 69 252 64
+    C278 61 299 64 320 62 Z"
+    fill="url(#rock)" stroke="#666b69" stroke-width="5" stroke-linejoin="round"/>
+
+  <g clip-path="url(#bodyClip)">
+    <!-- broad, graphic light and shadow regions -->
+    <path d="M28 190 C95 95 181 54 284 58 C213 91 166 124 130 174
+      C91 228 76 290 86 348 C53 316 29 252 28 190Z"
+      fill="#eeeeea" opacity=".58"/>
+    <path d="M292 47 C414 54 533 124 578 236
+      C540 204 493 184 444 181 C384 178 344 204 301 226
+      C255 249 205 255 162 236 C217 226 245 194 266 153
+      C282 122 288 83 292 47Z" fill="url(#light)"/>
+    <path d="M574 282 C590 392 512 512 398 560
+      C438 509 454 466 454 419 C454 359 421 318 393 284
+      C455 317 513 321 574 282Z" fill="url(#shadow)"/>
+    <path d="M60 390 C111 421 156 432 204 426
+      C254 420 290 391 337 392 C389 393 421 433 455 463
+      C401 452 370 465 337 491 C279 536 188 529 126 484
+      C94 460 72 427 60 390Z" fill="#777c79" opacity=".22"/>
+
+    <!-- stylized rocky bands -->
+    <path d="M82 176 C121 142 148 146 178 157 C207 168 222 160 246 140
+      C267 122 297 118 324 132 C284 137 273 163 246 180
+      C211 202 179 195 150 184 C124 174 104 174 82 196Z"
+      fill="#f0f0ec" opacity=".45"/>
+    <path d="M72 260 C113 227 147 229 181 244 C216 260 242 248 266 226
+      C294 201 331 202 360 221 C320 220 303 244 280 262
+      C246 289 205 293 168 276 C130 258 104 260 72 283Z"
+      fill="#777d7a" opacity=".25"/>
+    <path d="M92 333 C132 305 167 310 199 326 C230 342 257 338 284 319
+      C319 294 352 299 380 319 C342 317 322 341 293 359
+      C257 382 221 379 186 362 C151 345 121 348 92 359Z"
+      fill="#ecece8" opacity=".34"/>
+    <path d="M225 472 C265 447 296 451 326 465 C359 481 390 473 417 449
+      C442 428 473 430 496 444 C462 444 446 467 422 486
+      C387 514 350 515 316 499 C282 483 253 487 225 500Z"
+      fill="#555b59" opacity=".23"/>
+
+    <!-- large shallow craters -->
+    <g stroke-linejoin="round">
+      <ellipse cx="194" cy="192" rx="42" ry="31" transform="rotate(-18 194 192)"
+        fill="#777c79" opacity=".27" stroke="#666c69" stroke-width="5"/>
+      <ellipse cx="188" cy="187" rx="36" ry="25" transform="rotate(-18 188 187)"
+        fill="none" stroke="#eeeeea" stroke-width="5" opacity=".72"/>
+      <ellipse cx="365" cy="168" rx="29" ry="23" transform="rotate(12 365 168)"
+        fill="#626866" opacity=".24" stroke="#666c69" stroke-width="4"/>
+      <ellipse cx="359" cy="163" rx="24" ry="18" transform="rotate(12 359 163)"
+        fill="none" stroke="#e7e8e3" stroke-width="4" opacity=".7"/>
+      <ellipse cx="284" cy="315" rx="52" ry="38" transform="rotate(-9 284 315)"
+        fill="#686e6b" opacity=".28" stroke="#5f6562" stroke-width="5"/>
+      <ellipse cx="275" cy="308" rx="43" ry="29" transform="rotate(-9 275 308)"
+        fill="none" stroke="#ecece8" stroke-width="5" opacity=".7"/>
+      <ellipse cx="449" cy="354" rx="34" ry="26" transform="rotate(22 449 354)"
+        fill="#666d69" opacity=".25" stroke="#5d6461" stroke-width="4"/>
+      <ellipse cx="443" cy="348" rx="28" ry="20" transform="rotate(22 443 348)"
+        fill="none" stroke="#e8e9e4" stroke-width="4" opacity=".68"/>
+      <ellipse cx="166" cy="410" rx="25" ry="19" transform="rotate(8 166 410)"
+        fill="#666d69" opacity=".25" stroke="#5d6461" stroke-width="4"/>
+      <ellipse cx="161" cy="405" rx="20" ry="14" transform="rotate(8 161 405)"
+        fill="none" stroke="#e8e9e4" stroke-width="3.5" opacity=".68"/>
+    </g>
+
+    <!-- smaller pits -->
+    <g fill="#555c59" opacity=".32">
+      <circle cx="122" cy="268" r="7"/><circle cx="145" cy="292" r="5"/>
+      <circle cx="225" cy="115" r="6"/><circle cx="252" cy="206" r="5"/>
+      <circle cx="316" cy="247" r="7"/><circle cx="394" cy="238" r="5"/>
+      <circle cx="493" cy="270" r="8"/><circle cx="512" cy="389" r="6"/>
+      <circle cx="388" cy="430" r="7"/><circle cx="324" cy="521" r="5"/>
+      <circle cx="232" cy="485" r="7"/><circle cx="104" cy="355" r="6"/>
+      <circle cx="466" cy="202" r="4"/><circle cx="207" cy="365" r="4"/>
+    </g>
+    <g fill="none" stroke="#eff0eb" stroke-width="3" opacity=".48">
+      <path d="M113 266q8-10 17-4"/><path d="M215 111q8-7 15 0"/>
+      <path d="M308 243q8-8 16-2"/><path d="M485 266q9-7 16 1"/>
+      <path d="M380 425q8-7 15-1"/><path d="M97 351q7-8 13-2"/>
+    </g>
+
+    <!-- tiny angular facets -->
+    <g fill="#f1f1ed" opacity=".28">
+      <path d="M126 127l25-13-8 24z"/><path d="M420 116l27 18-31-5z"/>
+      <path d="M530 300l-13 24 3-31z"/><path d="M375 526l-24 13 8-22z"/>
+      <path d="M91 438l23 15-27-2z"/><path d="M256 552l27-8-14 17z"/>
+    </g>
+  </g>
+</svg>

@@ -32,6 +32,24 @@
   var errEl = document.getElementById('err');
   function say(text) { errEl.textContent = text; }
 
+  // the tab's title is the frame's (its skin's name, `skin name` / `skin read` change it): a tab
+  // titled "Tezcatl" alone says nothing when several are open (the same origin, so its <title> is read)
+  var frameEl = document.getElementById('frame');
+  var titleWatch = null;
+  function followTitle() {
+    var d = null;
+    try { d = frameEl.contentDocument; } catch (_) {}
+    if (!d) return;
+    var copy = function () { if (d.title) document.title = d.title; };
+    copy();
+    if (titleWatch) titleWatch.disconnect();
+    var head = d.querySelector('head') || d.documentElement;
+    titleWatch = new MutationObserver(copy);
+    titleWatch.observe(head, { subtree: true, childList: true, characterData: true });
+  }
+  frameEl.addEventListener('load', followTitle);
+  followTitle();
+
   // opening a tab or a window, config.json launcher and the pages: lib/core/open-page.js
   var op = Tezcatl.openPage;
   var manifest = null;

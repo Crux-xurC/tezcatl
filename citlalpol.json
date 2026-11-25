@@ -1,0 +1,20 @@
+{
+  "doc": "Citlalpol in Tezcatl (D-citlalpol-bus): how often citlalpol_bus reads the records through the relay (GET /citlalpol/records), how many it keeps for a panel opened later, and the glyphs citlalpol_image draws a packet with. A glyph is chosen from the record's structured fields only (decision, proto, port, method, path's extension, default) -- the first rule that matches; every field of a rule must match. Edit freely.",
+  "poll_ms": 2000,
+  "keep": 500,
+  "glyphs": [
+    { "when": { "default": true }, "glyph": "💭", "why": "declared, nothing decided to return (swallow's 501; older records)" },
+    { "when": { "proto": ["dns"] }, "glyph": "📇", "why": "a name asked in the wall (Citlalpol answers the wall's DNS)" },
+    { "when": { "port": [25, 465, 587, 993, 995, 143, 110] }, "glyph": "📧", "why": "mail" },
+    { "when": { "port": [22] }, "glyph": "⌨️", "why": "ssh" },
+    { "when": { "port": [5432, 3306, 6379, 27017] }, "glyph": "🖥️", "why": "a database" },
+    { "when": { "ext": ["png", "jpg", "jpeg", "gif", "webp", "svg"] }, "glyph": "📷", "why": "an image" },
+    { "when": { "method": ["POST", "PUT", "PATCH", "DELETE"] }, "glyph": "📩", "why": "sending" },
+    { "when": { "method": ["GET", "HEAD"] }, "glyph": "🔎", "why": "looking" },
+    { "when": { "proto": ["connect"] }, "glyph": "🛜", "why": "TLS through CONNECT: not read" },
+    { "when": { "proto": ["socks5"] }, "glyph": "📶", "why": "raw TCP through SOCKS5" },
+    { "when": { "proto": ["tcp"] }, "glyph": "🔌", "why": "TCP that ignored the proxy (forbidden's catch-all)" },
+    { "when": {}, "glyph": "💬", "why": "anything else" }
+  ],
+  "earths": ["🌍", "🌎", "🌏"]
+}

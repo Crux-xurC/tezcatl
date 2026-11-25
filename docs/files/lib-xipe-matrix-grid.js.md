@@ -22,10 +22,13 @@ them. How Xipe Totec's data is fetched and what it means are in an adapter per `
   by position — sorting and filtering would move colours to other cells
 - **Opened by the query only**: `matrix.html?kind=<adapter>&ref=<opaque reference>&root=<key of xipe.json>` (or
   `?path=<kind>:<ref>[@<root>]`); the shell does not read `ref`
-- **Read only**: the table changes no data. Changing data is a command handed to the dialogue window. The one exception:
+- **Read only**: the table changes no data. Changing data is a line handed to Xipe Totec — the dialogue window's, or the matrix_set's
+  own `xipe <line>` ([D-xipe-elsewhere](lib-xipe-xipe-line.js.md#d-xipe-elsewhere)). The one exception:
   `matrix approve` on a `xipe_classes` table approves the classes of the rows selected
   ([D-xipe-approval](lib-xipe-xipe-classes.js.md#d-xipe-approval))
-- **No automatic refresh**: a person fetches again. `matrix.html` keeps `{kind, ref, root}`, takes `matrix.reload` / `matrix.load` and
+- **No automatic refresh**: a person fetches again. One exception, citlalpol_log ([D-citlalpol-bus](lib-citlalpol-citlalpol-bus-page.js.md#d-citlalpol-bus),
+  2026-11-24): Citlalpol's records are append-only, so its rows are only added at the bottom and never change (colours and selection
+  stay by row id; `p` pauses). `matrix.html` keeps `{kind, ref, root}`, takes `matrix.reload` / `matrix.load` and
   posts `matrix.loaded {kind, ref, root, ok, message, rows}` each time. The `matrix` skin (table + command line) has the commands
   `matrix update` / `matrix get <path>` / `matrix pwd` (`lib/xipe/matrix-commands.js`), also tezcatl commands, and `matrix approve`
   ([D-xipe-approval](lib-xipe-xipe-classes.js.md#d-xipe-approval))

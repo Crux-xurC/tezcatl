@@ -12,7 +12,8 @@
 //     for a browser's Origin); a WebSocket with no Origin (Xipe Totec's
 //     /lsp) goes through
 //   - "Poca's" pages work: ws.js (the input panel), xterm's /pty, the
-//     xipe client's /xipe (the fake Xipe server), code_editor's /fs and /lsp
+//     xipe client's /xipe and the persistent one (xipe-session: the dock, the dialogue window) to the fake
+//     Xipe server, code_editor's /fs and /lsp
 //   - an ordinary browser's page (no header) gets nothing: no socket, 401
 //   - the relay's log names what it refused, never a ticket
 import net from 'node:net';
@@ -102,6 +103,19 @@ await list.waitFor('!!(window.Tezcatl && Tezcatl.xipeClient && Tezcatl.ticket)',
 const xr = await list.eval(`Tezcatl.xipeClient.request(Tezcatl.config, 'fake', 'input', {text: 'help'})
   .then(() => 'ok', (e) => 'error: ' + e.message)`);
 check(xr === 'ok', "Poca's xipe client: /xipe answers (the fake Xipe server) -- " + xr);
+// the persistent /xipe of the dock's xipe target, the dialogue window and a matrix_set's line (xipe-session):
+// every (re)connect with a ticket of its own
+const xs = await list.eval(`new Promise((res) => {
+  const sc = document.createElement('script'); sc.src = '../../lib/xipe/xipe-session.js';
+  sc.onload = () => Tezcatl.config.load().then((c) => {
+    const seen = [];
+    const s = Tezcatl.xipeSession.create({ url: Tezcatl.xipeSession.relayXipeUrl(c, '/xipe'), root: 'fake',
+      on: { state: (st) => { seen.push(st); if (st === 'open') { s.close(); res(seen.join(' ')); } } } });
+    setTimeout(() => { s.close(); res(seen.join(' ') + ' (timeout)'); }, 8000);
+  });
+  document.head.appendChild(sc);
+})`);
+check(/open$/.test(xs), "Poca's persistent /xipe (the dock's xipe, the dialogue window): opens with a ticket -- " + xs);
 await list.close();
 
 const dir = path.join(E2E, 'fsroot', 'gate');
