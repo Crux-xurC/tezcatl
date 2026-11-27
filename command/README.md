@@ -111,6 +111,9 @@ commands.
 | `matrix.update` | | fetch the table again (a `matrix_set`'s table, else the last `matrix.html`) | `lib/xipe/matrix-bar-page.js`, `lib/xipe/matrix-page.js` (page `panels/resident/matrix.html`, syntax `lib/xipe/matrix-commands.js`, target `lib/xipe/matrix-target.js`) |
 | `matrix.get` | `path` | fetch the table at that path (if none is open, a new `matrix.html` — `fallback`) | same |
 | `matrix.pwd` | | show the table's path | same |
+| `matrix.filter` | `col`, `expr` | the filter of a column (its key or label) as `/` sets it; no `expr`: taken away | same |
+| `matrix.save-kind` | `name` | keep the table shown as it is (`json:`, `xipe_raw:`) or a declared one as a declared kind, `~work/matrix_kinds/<name>.json`, never over one there (`D-matrix-raw`) | same (`lib/xipe/matrix-kinds.js`) |
+| `matrix.kinds` | | the kinds of table there are — built in, then declared (`~work/matrix_kinds/`, `matrix_kinds/`) — one a line on the receiving side | same |
 | `matrix.approve` | | on a `xipe_classes` table (classes an AI agent proposed, or whose function's body changed since), approve the rows selected — Xipe Totec's `effect/approve`, all or none — and fetch the table again (`D-xipe-approval`) | same (adapter `lib/xipe/xipe-classes.js`) |
 | `color.show` | `color` / `json` `name` | turn the colour panel into that colour (`json` is `{"name": "colour"}` from the FS root); if none is open, a new window | `panels/extra/color.html`, `lib/view/color-page.js` |
 
@@ -199,7 +202,7 @@ way (`tree at 2 1`, the map, `@2 1`).
 | `skin switch ver a b [column]` / `skin switch hor a b` | swap inside a column / swap columns |
 | `skin focus 2 3` / `skin focus x` `x -` `y` `y -` | focus by place (area, then position) or direction |
 | `skin focus abs` (short: a line of `:` alone) | to the map at the bottom (`panels/extra/panel_abstract.html`); its `hjkl` and arrows are `skin focus x -`, `y`, `y -`, `x`; `Enter` enters the panel (keys in `lib/skin/panel-abstract-page.js`) |
-| `radar` | the current selection of the panel with coordinates focused last (now: tables) as one line with a reference on the receiving side — the table's path, the row type, the column keys and the row ids (`@<id> <id>`), never values; a table of another window works too (coordinates are kept by the resident `cursor` panel; `lib/skin/radar.js`, `D-references`) |
+| `radar` | the current selection of the panel with coordinates focused last (now: tables) as one line with a reference on the receiving side — the table's path, the row type, what the ids are when the table says (`(node ids)`, `(calc row ids)`), the column keys and the row ids (`@<id> <id>`), never values; a table of another window works too (coordinates are kept by the resident `cursor` panel; `lib/skin/radar.js`, `D-references`) |
 | a lone `@` in a line | replaced by the receiving side's last reference before the line runs — a panel's place now (`21`), a place in a file `path:line`, a coordinate's row ids (separated by blanks); an `@` inside a word (`@attr`, `a@b`) stays; with no reference, the line is not run |
 | `go on` | to what the last line with a reference on the receiving side points at; references show at the end of lines as `@2 1` (a panel), `@path:line` (a place in a file), `@<id>` (a `radar` coordinate); a panel is focused, a place is `code.open-at`, a coordinate goes to its panel; lines with references: `skin add`, the tree's `Enter`, `:find`, `code.open-at`'s answers (`D-references`, `lib/skin/recv-refs.js`) |
 | `lsp list` | the running language servers, numbered, on the receiving side (`GET /lsp/servers`; parsing and handling `lib/skin/lsp-commands.js`, wiring `lib/skin/frame-code.js`) |
@@ -212,6 +215,7 @@ way (`tree at 2 1`, the map, `@2 1`).
 | `work list` | the record of running and finished work in a list panel (`work`; added, or gone to). The invisible `panels/invisible/work.html` keeps it by matching bus messages with the pair table (`work.json`: start and end types and the key). A row is: number, state (`running`, `slow`, `done`, `failed`, `expired` — no end within the pair's `expireMs`), what, who fired it, when, how long. `Enter` goes to the firer, `Del` stops it (`D-work-list`, `lib/skin/work-commands.js`) |
 | `work watch` | only the rows of that record not finished (`work_watch`); over the pair's time they are `slow` |
 | `work cancel <number>` | stop that row (today LSP requests — `$/cancelRequest`); rows that cannot be stopped, or are done, are said so |
+| `list kinds` / `matrix kinds` | the kinds of list panel there are (`lib/list/list-kinds.js` `KINDS`), the kinds of table there are — built in, then declared (`~work/matrix_kinds/`, `matrix_kinds/`; `lib/xipe/matrix-kinds.js`, `D-matrix-raw`) — one a line on the receiving side |
 | `who` | a roll call of open panels (dropping those whose closing was never announced), numbered on the receiving side; panels in the frame with their places |
 | `diff -n A,B` | two saved files side by side in a new `code_diff` panel (`panels/resident/code_diff.html`), added in the current `code_editor`'s column; paths from the FS root (`~work/…` is the work place), `./` `../` from the current `code_editor`'s file (`lib/code/code-diff.js`, `D-work-place`) |
 | `diff -f A,B` | the same two to the focused `code_diff` (else the first of this frame) |
@@ -235,8 +239,10 @@ way (`tree at 2 1`, the map, `@2 1`).
 `tree del n`, `tree order n m`, `tree tag n [text]`, `tree update`, `tree edit [path]` — the same as 2.1's `tree.*`.
 
 **The command line of `matrix_set`** (a synthesis — `syntheses/matrix_set.json`, run by `lib/xipe/matrix-bar-page.js`; it replaced the matrix skin; syntax `lib/xipe/matrix-commands.js`; the leading `matrix` may be left out): `matrix update`,
-`matrix get <path>`, `matrix pwd`, `matrix approve` — the same as 2.1's `matrix.*`. Also `radar` (this table's selection becomes "the last reference"; the band
-shows `radar ── <table path>  <type>  [<columns>]  @<id>` — `lib/skin/radar.js`), and `xipe <line>` (`<line>` goes to Xipe Totec, to the root of the
+`matrix get <path>`, `matrix pwd`, `matrix approve`, `matrix filter <column> [<expression>]`, `matrix save-kind <name>`, `matrix kinds` — the same as
+2.1's `matrix.*`. A path's kind may be one shown as it is — `json:<path>` (a JSON file), `xipe_raw:<method>[?k=v&…]` (a Xipe Totec method
+that changes nothing, as `method/list` says) — or a declared one (`cards:all`; `D-matrix-raw`). Also `radar` (this table's selection becomes "the last reference"; the band
+shows `radar ── <table path>  <type> (<what the ids are> ids)  [<columns>]  @<id>` — `lib/skin/radar.js`), and `xipe <line>` (`<line>` goes to Xipe Totec, to the root of the
 table shown, as the dialogue window sends it — `@` is the last reference; the first line of the answer on the band, all of it the frame's
 xipe source; `lib/xipe/xipe-line.js`, `D-xipe-elsewhere`).
 

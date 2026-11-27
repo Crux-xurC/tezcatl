@@ -111,6 +111,10 @@
     { "line": "matrix update", "desc": "fetch the table again", "in": "matrix" },
     { "line": "matrix get <path>", "desc": "fetch the table at kind:ref[@root]", "in": "matrix" },
     { "line": "matrix pwd", "desc": "the path of the table shown", "in": "matrix" },
-    { "line": "matrix approve", "desc": "a xipe_classes table: approve the classes of the rows selected", "in": "matrix" }
+    { "line": "matrix approve", "desc": "a xipe_classes table: approve the classes of the rows selected", "in": "matrix" },
+    { "line": "matrix filter <column> [<expression>]", "desc": "the column's filter, as / sets it (none: taken away)", "in": "matrix" },
+    { "line": "matrix save-kind <name>", "desc": "keep the table shown as it is as a declared kind (~work/matrix_kinds/)", "in": "matrix" },
+    { "line": "matrix kinds", "desc": "the kinds of table there are (built in, declared)", "in": "frame matrix" },
+    { "line": "list kinds", "desc": "the kinds of list panel there are", "in": "frame" }
   ]
 }

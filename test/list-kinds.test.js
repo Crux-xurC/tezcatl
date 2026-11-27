@@ -744,3 +744,53 @@ test('skin_list.onKey: M-r reads the skin through skin.read; a name with a blank
   assert.deepEqual(calls, [['skin.read', { name: 'workspace_4' }]]);
   assert.match(logs[1], /has a blank/);
 });
+
+test('old-place: ~work/old/<kind>/<name>-<stamp>.json; a name is one file name; a move asked twice', () => {
+  const O = require('../lib/core/old-place.js');
+  assert.equal(O.path('skins', 'work', new Date(2026, 10, 26, 9, 5, 7)), '~work/old/skins/work-20261126-090507.json');
+  assert.equal(O.path('skins', '../a b', new Date(2026, 0, 1)), '~work/old/skins/--a-b-20260101-000000.json');
+  let t = 0;
+  const c = O.twice({ ms: 3000, now: () => t });
+  assert.equal(c.press('a'), false);
+  t = 1000; assert.equal(c.press('b'), false, 'another key starts again');
+  t = 2000; assert.equal(c.press('b'), true);
+  t = 2500; assert.equal(c.press('b'), false, 'after a move, the next press asks again');
+  t = 9000; assert.equal(c.press('b'), false, 'too late');
+});
+
+test('skin_list.remove: Del twice moves a saved skin to ~work/old/skins/ (written first, then out of the saved ones); files are not moved', async () => {
+  const k = kinds.skin_list;
+  const realFetch = global.fetch;
+  let saved = { work: { name: 'work', columns: [[]] }, keep: { name: 'keep', columns: [] } };
+  const writes = [];
+  const store = {
+    load: () => Promise.resolve(saved),
+    update: (key, fn) => { const v = fn(saved); if (v !== undefined) saved = v; return Promise.resolve({ ok: true, value: saved }); },
+  };
+  global.fetch = (u, o) => {
+    if (o && o.method === 'PUT') { writes.push([decodeURIComponent(u), o.headers['x-tezcatl-base'], JSON.parse(o.body)]); return Promise.resolve({ ok: true }); }
+    return Promise.resolve({ ok: false });
+  };
+  const logs = [];
+  const api = { fsBase: 'http://r', log: (s) => logs.push(s), store };
+  try {
+    const first = await k.remove({ raw: { name: 'work' } }, {}, api);
+    assert.equal(first.ok, false);
+    assert.match(logs.pop(), /Del again/);
+    assert.equal(writes.length, 0);
+    const second = await k.remove({ raw: { name: 'work' } }, {}, api);
+    assert.equal(second.ok, true);
+    assert.equal(writes.length, 1);
+    assert.match(writes[0][0], /\/fs\/write\?path=~work\/old\/skins\/work-\d{8}-\d{6}\.json$/);
+    assert.equal(writes[0][1], 'absent');
+    assert.deepEqual(writes[0][2], { name: 'work', columns: [[]] });
+    assert.deepEqual(Object.keys(saved), ['keep']);
+    assert.match(logs.pop(), /^moved "work" to ~work\/old\/skins\//);
+    await k.remove({ raw: { name: 'agenda', from: 'skins' } }, {}, api);
+    await k.remove({ raw: { name: 'agenda', from: 'skins' } }, {}, api);
+    assert.match(logs.pop(), /shipped skins stay/);
+    await k.remove({ raw: { name: 'mine', from: 'local/skins' } }, {}, api);
+    assert.match(logs.pop(), /by hand/);
+    assert.equal(writes.length, 1);
+  } finally { global.fetch = realFetch; }
+});

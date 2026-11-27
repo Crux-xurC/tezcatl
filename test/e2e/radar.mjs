@@ -33,12 +33,12 @@ check(rows.length > 1, 'the calc rows of the copy: ' + rows.length);
 
 // the whole first row (the cursor starts on the gutter)
 let r = await cmd('radar');
-check(r === 'radar ── xipe_rows:all  calc_row  @' + rows[0].id, 'radar: the row the cursor is on, as the table\'s path, the type and the id: ' + r);
+check(r === 'radar ── xipe_rows:all  calc_row (calc row ids)  @' + rows[0].id, 'radar: the row the cursor is on, as the table\'s path, the type and the id: ' + r);
 // down one, into the first column
 await tkey('j', 'KeyJ');
 await tkey('l', 'KeyL');
 r = await cmd('radar');
-check(r === 'radar ── xipe_rows:all  calc_row  [sentence]  @' + rows[1].id, '...after j l: the second row, the column key (no value): ' + r);
+check(r === 'radar ── xipe_rows:all  calc_row (calc row ids)  [sentence]  @' + rows[1].id, '...after j l: the second row, the column key (no value): ' + r);
 check(!r.includes('→'), '...the line carries no cell value');
 // a key the table does not know
 await m.eval(`window.__seen = []; Tezcatl.bus.on('matrix.action', (p) => window.__seen.push(p)); true`);
@@ -48,7 +48,7 @@ check((await m.eval(`window.__seen.length`)) === 0, 'a key the table does not kn
 await tkey('v', 'KeyV');
 await tkey('j', 'KeyJ');
 r = await cmd('radar');
-check(r === 'radar ── xipe_rows:all  calc_row ×2  [sentence]  @' + rows[1].id + ' ' + rows[2].id, '...v j: two rows, their ids in order: ' + r);
+check(r === 'radar ── xipe_rows:all  calc_row ×2 (calc row ids)  [sentence]  @' + rows[1].id + ' ' + rows[2].id, '...v j: two rows, their ids in order: ' + r);
 
 // the dialogue window (another window): "@" alone takes the last reference
 const x = await openPage(PAGES + 'panels/skins/xipe.html?root=fake');
@@ -79,7 +79,7 @@ const line = async (text, ms = 500) => {
 };
 check(/^! @ ── no line with a reference/m.test(await line('skin focus @')), 'the frame: "@" with no reference yet says so (the line is not run)');
 r = await line('radar');
-check(r.endsWith('radar ── xipe_rows:all  calc_row ×2  [sentence] @' + rows[1].id + ' ' + rows[2].id), 'the frame\'s radar: the table of the other window, on the receiving side with the reference: ' + r.split('\n').pop());
+check(r.endsWith('radar ── xipe_rows:all  calc_row ×2 (calc row ids)  [sentence] @' + rows[1].id + ' ' + rows[2].id), 'the frame\'s radar: the table of the other window, on the receiving side with the reference: ' + r.split('\n').pop());
 r = await line('skin focus @');
 check(r.startsWith('> skin focus ' + rows[1].id + ' ' + rows[2].id), '"@" alone in the frame\'s line is replaced by it (the line shown is the one run)');
 check(/go on ── xipe_rows:all \(another window/.test(await line('go on')), 'go on to a coordinate of another window: asks that panel to take the focus, and says so');

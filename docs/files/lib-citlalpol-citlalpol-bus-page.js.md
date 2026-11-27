@@ -23,7 +23,10 @@ which records every attempt of the program inside as one JSON line) is seen in T
 - **citlalpol_log** — the records as a table (the matrix grid), from the bus of its own skin only. **Rows are only added at the bottom and
   never change**: the exception to [D-matrix-shell](lib-xipe-matrix-grid.js.md#d-matrix-shell)'s "no automatic refresh", granted because
   records are append-only and colours and selection are kept by row id, so nothing moves under the cursor. `p` pauses (what comes
-  meanwhile waits, counted), `Enter` shows the record in full
+  meanwhile waits, counted), `Enter` shows the record in full. **The time keeps its date** (`11-26 14:30:05`, from the record's `at` as
+  Citlalpol wrote it, its own offset): to see from a moment on is the table's filter, `/` on the time (`>= 11-26 14:30`), right across
+  midnight (2026-11-26, crux; before, only `hh:mm:ss` was shown, and yesterday's evening sorted after today's afternoon). Nothing is
+  hidden or removed in the records themselves: what is shown is the table's business, the records Citlalpol's
 - **citlalpol_image** — the records drawn: tezcatl's side (a satellite), Citlalpol (Venus, the morning star), the Internet (the Earth),
   each with a turning ring of its name (the Nahuatl name alone says nothing of the picture). A record travels as a glyph of
   `citlalpol.json` chosen by its structured fields only (decision, proto, port, method, the path's extension, undecided): on to the

@@ -82,7 +82,9 @@ test('line.json read as suggestions: the first words, and ?in= narrows', () => {
   assert.equal(first[0], 'skin');
   assert.ok(first.includes(':w') && first.includes('tree'));
   const frame = S.next(S.index(L.toTable(lineDoc, { in: 'frame,code_editor' }), {}), '').items.map((x) => x.word);
-  assert.ok(frame.includes(':w') && !frame.includes('tree') && !frame.includes('matrix'));
+  assert.ok(frame.includes(':w') && !frame.includes('tree'));
+  const frameMatrix = S.next(S.index(L.toTable(lineDoc, { in: 'frame,code_editor' }), {}), 'matrix ').items.map((x) => x.word);
+  assert.deepEqual(frameMatrix, ['kinds'], "of the matrix lines, the frame takes only `matrix kinds`");
   assert.ok(frame.includes('radar'));
 });
 

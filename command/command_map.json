@@ -78,6 +78,9 @@
     { "name": "color.show",    "desc": "color: turn the colour panels the colour given ({color}, or {json, name}: the colour <name> of a JSON from the FS root); with none open, open a new color.html", "args": ["color", "json", "name"],
       "fallback": { "open": "panels/extra/color.html?color={color}&json={json}&key={name}" } },
     { "name": "matrix.pwd",    "desc": "matrix: show the path of the table shown" },
-    { "name": "matrix.approve", "desc": "matrix: on a xipe_classes table, approve the classes of the rows selected (Xipe Totec's effect/approve, all or none), then fetch it again" }
+    { "name": "matrix.approve", "desc": "matrix: on a xipe_classes table, approve the classes of the rows selected (Xipe Totec's effect/approve, all or none), then fetch it again" },
+    { "name": "matrix.filter", "desc": "matrix: the filter of column <col> (its key or label), as / sets it; no <expr>: taken away", "args": ["col", "expr"] },
+    { "name": "matrix.save-kind", "desc": "matrix: keep the table shown as it is (json:, xipe_raw:) or a declared one as a declared kind, ~work/matrix_kinds/<name>.json (D-matrix-raw)", "args": ["name"] },
+    { "name": "matrix.kinds", "desc": "matrix: the kinds of table there are, built in and declared, on the receiving side" }
   ]
 }

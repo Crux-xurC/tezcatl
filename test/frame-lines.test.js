@@ -20,6 +20,8 @@ function frame(opts = {}) {
   const notMine = () => false;
   const T = {
     radar: { hasAt: () => false },
+    listKinds: opts.listKinds,
+    matrixKinds: opts.matrixKinds,
     dockLayout: require('../lib/skin/dock-layout.js'),
     dbCommands: require('../lib/skin/db-commands.js'),
     color: { parse: () => ({ error: 'x' }) },
@@ -123,4 +125,19 @@ test('the commands with a line in command_map.json name args they have', () => {
     const used = [...c.line.matchAll(/\{(\w+)\}/g)].map((m) => m[1]);
     for (const a of used) assert.ok((c.args || []).includes(a), c.name + ': {' + a + '} is not one of its args');
   }
+});
+
+test('list kinds / matrix kinds: one kind a line on the receiving side', async () => {
+  const listKinds = { KINDS: { killring: 'the kill ring picker', dict: 'a dictionary' } };
+  const MK = require('../lib/xipe/matrix-kinds.js');
+  const matrixKinds = Object.assign({}, MK, { ioFor: () => Promise.resolve({ fsBase: null, sibling: (r) => r, getJson: () => Promise.resolve(null) }) });
+  const f = frame({ listKinds, matrixKinds });
+  assert.equal(f.lines.run('list kinds'), true);
+  assert.deepEqual(f.said.slice(1), ['killring ── the kill ring picker', 'dict ── a dictionary']);
+  assert.equal(await f.lines.run('matrix kinds'), true);
+  assert.ok(f.said.some((l) => /^xipe_raw ── /.test(l)));
+  assert.deepEqual(f.ran, []);
+  const g = frame();
+  assert.equal(g.lines.run('list kinds'), false);
+  assert.match(g.said[1], /not loaded/);
 });

@@ -21,6 +21,22 @@ test('parse: what is refused, saying how to write it', () => {
   assert.match(parse('matrix').error, /no command/);
 });
 
+test('parse: filter (the expression as written), save-kind, kinds', () => {
+  assert.deepEqual(parse('matrix filter time >= 11-26 14:30'), { cmd: 'filter', col: 'time', expr: '>= 11-26 14:30' });
+  assert.deepEqual(parse('filter decision'), { cmd: 'filter', col: 'decision', expr: '' });
+  assert.match(parse('matrix filter').error, /a column/);
+  assert.deepEqual(parse('matrix save-kind mine'), { cmd: 'save-kind', name: 'mine' });
+  assert.match(parse('save-kind').error, /one name/);
+  assert.deepEqual(parse('kinds'), { cmd: 'kinds' });
+  assert.match(parse('kinds x').error, /takes no arguments/);
+});
+
+test('parsePath: the kinds shown as they are', () => {
+  assert.deepEqual(parsePath('json:~work/books/decode/magit.log.json'), { kind: 'json', ref: '~work/books/decode/magit.log.json', root: '.' });
+  assert.deepEqual(parsePath('xipe_raw:row/list?call_ids=a,b'), { kind: 'xipe_raw', ref: 'row/list?call_ids=a,b', root: '.' });
+  assert.deepEqual(parsePath('cards:all'), { kind: 'cards', ref: 'all', root: '.' });
+});
+
 test('parsePath: kind:ref[@root]', () => {
   assert.deepEqual(parsePath('xipe_rows:all'), { kind: 'xipe_rows', ref: 'all', root: '.' });
   assert.deepEqual(parsePath('xipe_rows'), { kind: 'xipe_rows', ref: 'all', root: '.' });

@@ -2,7 +2,7 @@
 // Citlalpol state ($E2E_DIR/citlalpol/records, never this machine's) reach a frame's citlalpol_bus through the
 // relay, and its citlalpol_log shows them as rows -- one opened later gets what the bus keeps, a new record
 // is added at the bottom, p pauses (what comes waits, then is added), a value with an escape sequence is
-// text. A log alone (no bus in its skin) says so. citld's pid file decides "citld running".
+// text, its time with its date. A log alone (no bus in its skin) says so. citld's pid file decides "citld running".
 import { openPage, PAGES, check, done } from './cdp.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -44,6 +44,7 @@ const cells = () => p.eval(`JSON.stringify(${LOG}.cells())`).then(JSON.parse);
 let c = await cells();
 const b = c.find((x) => x.dest === tag + '-b.test:80');
 check(!!b && b.request === 'GET /ping' && b.result === 'undecided (captured)' && b.decision === 'stand_in', 'a row: destination, request, result -- ' + JSON.stringify(b));
+check(!!b && /^\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(b.time), 'the time keeps its date (MM-DD hh:mm:ss), so a filter is right across midnight -- ' + (b && b.time));
 
 const before = (await cells()).length;
 rec({ decision: 'pass', proto: 'connect', host: tag + '-c.com', port: 443, method: 'CONNECT', cmd: 'git \x1b]0;pwned\x07 fetch' });

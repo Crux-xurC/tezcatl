@@ -162,9 +162,13 @@ column (area) then the position (`skin focus 2 3`, `skin del 2 3`).
 | `go on` | to what the last line with `@…` on the receiving side points at ("References" below) |
 | `radar` | the current selection of the table used last, as a line with a reference (§9) |
 | `skin name <name>` / `skin save [name]` / `skin read <name>` | name it / save / open (`frame.html?skin=<name>` too). This name (`workspace_N` until named) is the window's name |
-| `skin add skin_list` | the saved skins as a list, then the shipped ones (`skins/`: main, demo, vibe_coding, agenda) and your own files (`local/skins/`), marked by where they are: lines (empty ones), axis, ratios, panels; a panel saved under an old name (`code_vi`) is marked. `Enter` opens one in a new frame window, `M-r` reads it into the frame focused last (`skin.read`) |
+| `skin add skin_list` | the saved skins as a list, then the shipped ones (`skins/`: main, demo, vibe_coding, agenda) and your own files (`local/skins/`), marked by where they are: lines (empty ones), axis, ratios, panels; a panel saved under an old name (`code_vi`) is marked. `Enter` opens one in a new frame window, `M-r` reads it into the frame focused last (`skin.read`), `Del` twice moves a saved one to `~work/old/skins/<name>-<time>.json` (out of the list; a shipped or `local/skins/` one is not moved) |
 
 A frame being worked on is kept per window (a reload shows the same). The files open in `code_editor` are not kept.
+
+**Taking things away**: what tezcatl keeps is never deleted from a panel. It is moved to `~work/old/<kind>/` (the key pressed twice), and
+you clean that directory with the shell: `rm -r ~/.local/state/tezcatl/work/old/*`. Back: a skin moved there becomes yours again in
+`local/skins/` (named in its `index.json`) ([D-old-place](files/lib-core-old-place.js.md#d-old-place)).
 
 ### What is running, who is open (`work`, `who`)
 
@@ -174,6 +178,7 @@ A frame being worked on is kept per window (a reload shows the same). The files 
 | `work watch` | only what has not ended; what takes long is `slow` |
 | `work cancel <number>` | stop that row (language-server requests, for now). `Del` in the list |
 | `who` | asks every open panel again and lists them on the receiving side (with their place in the frame) |
+| `list kinds` / `matrix kinds` | the kinds of list panel there are / the kinds of table (built in, then declared — §9 "Table"), one a line on the receiving side |
 
 - States: `running`, `slow`, `done`, `failed`, `expired`. `Enter` in the list goes to the panel that started it
 - `expired`: no end came within the time set (a command nobody took, a file already open …). The times are `expireMs` in
@@ -696,6 +701,7 @@ xipe eval                                  # evaluate; compared with the last va
 | Command | What it does |
 |---|---|
 | `xipe choice project <path>` | register and choose a target |
+| `xipe choice project` / `xipe choice project <id>` | the registered projects (id, path; `*` the chosen one) / choose one by its id (`002`) |
 | `xipe table generate` | make the file → language table again (after adding files, `mix.exs`, `flake.nix`) |
 | `xipe scan` / `xipe show` | read / list |
 | `xipe eval [id...] [--include-writes]` | evaluate (all when no id) |
@@ -731,6 +737,8 @@ xipe eval                                  # evaluate; compared with the last va
 | `eval/status` | — | what is being evaluated |
 | `eval/cancel` | `pass_id` (omitted when one runs) | stop a running pass (nothing is recorded); a queued one by its `pass_id` |
 | `roster` | — | the tables and columns `search` reads, and the columns `dialogue rewrite` writes |
+| `project/list` | — | the registered projects: id, name, path, which is chosen and which is open here (`matrix get xipe_raw:project/list` shows it as a table) |
+| `method/list` | — | every method: whether it writes, asks to confirm, evaluates; its arguments (what `xipe_raw:` asks before calling one) |
 | `scan/run` | — | the same as `xipe scan` |
 
 An address combines `file=`, `module=`, `name=`, `arity=`, `row=`.
@@ -844,7 +852,24 @@ The table above, a command line below (`Ctrl-Enter`). The table does not change 
 | `matrix get <path>` | fetch that table: `xipe_rows:all` (every row), `xipe_rows:call_ids=<id>,<id>`, `xipe:module=Calc&name=add&arity=2` (one function) |
 | `matrix pwd` | the current table's path |
 | `matrix approve` | on `xipe_classes:all`: approve the classes of the rows selected (the cursor's row, or a selection) |
+| `matrix filter <column> [<expression>]` | the column's filter, as `/` sets it (`matrix filter effect pure`, `matrix filter time >= 11-26 14:30`); the column alone takes it away. The column by its key or its heading |
+| `matrix save-kind <name>` | keep the table shown as it is (below) as a kind of its own, `~work/matrix_kinds/<name>.json` (never over one there); then `matrix get <name>:all` |
+| `matrix kinds` | the kinds of table there are: the built-in ones with what their path takes, then the declared ones and where they are (on the receiving side) |
 | `xipe <line>` | send `<line>` to Xipe Totec, to the root of the table shown, as the dialogue window would (`xipe eval @` after `radar`); the table is not fetched again by itself |
+
+**A table as it is, and kinds of your own** ([D-matrix-raw](files/lib-xipe-matrix-kinds.js.md#d-matrix-raw)). With no adapter for it, a
+table is shown as its JSON is — every key a column, a value as text:
+
+| Path | What |
+|---|---|
+| `json:<path>` | a JSON file (`~work/…`, or a path from the FS root): an array of objects, or an object holding one array; else its keys as rows |
+| `xipe_raw:<method>[?key=value&…]` | the answer of a Xipe Totec method — **only one that changes nothing** (`card/list`, `row/list?call_ids=a,b`, `project/list`, `method/list` …). One that writes, asks to confirm or evaluates is refused: send it with `xipe <line>` |
+| `cards:all` | shipped (`matrix_kinds/cards.json`): the functions with their **node ids** as row ids. `v` the ones you want, `radar`, then `xipe effect/set id=@ effect=pure` or `xipe dialogue do row/add node=@` — no copying ids |
+| `<name>:all` | yours: `matrix save-kind <name>` on a table shown as it is, or a file you write in `~work/matrix_kinds/` (its shape: the head of `lib/xipe/matrix-kinds.js`); yours are looked at before the shipped ones |
+
+`radar` says what the ids are when the table knows it: `(node ids)` (cards, `xipe_classes`), `(calc row ids)` (`xipe_rows`), so a node id
+does not go where a row id is meant. A table shown as it is with no id key has positions (`r0`, `r1` …) as ids. `xipe_cards` (the list)
+stays as a quick list of the functions.
 
 **Approving an AI agent's classes.** Xipe Totec evaluates a function only after a person classified it (`pure`, `reads`, `writes`). An
 agent using Xipe Totec over MCP (`xipe mcp`) can only propose a class, with a one-line reason; a function a person had classified and
@@ -894,7 +919,7 @@ the cursor on one, it shows in full below. Other keys do nothing.
 To put the selected rows into a line of the dialogue window, two steps:
 
 1. `radar` in the table's command line (or the frame's input line) — the selection becomes "the last reference". The band (the
-   receiving side) shows `radar ── xipe_rows:all  calc_row  [sentence]  @<row id>`; several selected rows give several ids
+   receiving side) shows `radar ── xipe_rows:all  calc_row (calc row ids)  [sentence]  @<row id>`; several selected rows give several ids
 2. `eval @` in the dialogue window — `@` is replaced by the row ids and sent (the record shows the line after replacing)
 
 - `radar` gives only the table's path, the row type, the column keys and the row ids (no values)
@@ -910,7 +935,8 @@ If you run programs inside forbidden's wall with Citlalpol behind its door (sepa
 here. In a frame: `skin add citlalpol_bus`, then `skin add citlalpol_log` and/or `skin add citlalpol_image` — the log and the picture take
 the records of the bus of their own skin (without one they say so). The bus line shows whether records flow and whether citld runs.
 
-- `citlalpol_log`: one row a record (time, decision, protocol, destination, request, command, result, access.json, run). New ones are
+- `citlalpol_log`: one row a record (time — with its date, `11-26 14:30:05` —, decision, protocol, destination, request, command, result,
+  access.json, run). To see from a moment on: `/` on the time, `>= 11-26 14:30` (right across midnight). New ones are
   added at the bottom; `p` pauses and goes on, `Enter` shows the record in full; `/` filters, sorting, colours and `y` as in a matrix
 - `citlalpol_image`: each record travels as a glyph from tezcatl (the satellite) to Citlalpol (Venus): on to the Internet (the Earth) when
   passed, back when a stand-in answered, stopped with ✕ when refused. Several at once show a circled count. The glyphs are

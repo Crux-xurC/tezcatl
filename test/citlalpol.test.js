@@ -29,13 +29,25 @@ test('log: a record as a row of text; control characters shown, never acting', (
   const row = L.row({ n: 7, r: { at: '2026-11-24T12:00:18.123+09:00', decision: 'stand_in', proto: 'http', host: 'pong.test', port: 80,
     method: 'GET', path: '/ping', cmd: 'curl \x1b]0;pwned\x07 x', default: true, captured: true, access: 'try', run: 'c-1' } });
   assert.equal(row.id, 'c7');
-  assert.equal(row.cells.time, '12:00:18');
+  assert.equal(row.cells.time, '11-24 12:00:18');
   assert.equal(row.cells.dest, 'pong.test:80');
   assert.equal(row.cells.request, 'GET /ping');
   assert.equal(row.cells.result, 'undecided (captured)');
   assert.equal(row.cells.cmd, 'curl \\x1b]0;pwned\\x07 x');
   assert.equal(L.row({ n: 1, r: { decision: 'refuse', why: 'not in access.json' } }).cells.result, 'not in access.json');
   assert.equal(L.row({ n: 2, r: { decision: 'stand_in', matched: 'ping' } }).cells.result, 'matched ping');
+});
+
+test('log: the time keeps its date, so a filter is right across midnight', () => {
+  const late = L.row({ n: 1, r: { at: '2026-11-24T23:59:00.000+09:00' } }).cells.time;
+  const early = L.row({ n: 2, r: { at: '2026-11-25T00:01:00.000+09:00' } }).cells.time;
+  assert.equal(late, '11-24 23:59:00');
+  assert.equal(early, '11-25 00:01:00');
+  const G = require('../lib/xipe/matrix-data.js');
+  const since = G.parseFilterExpr('>= 11-25 00:00');
+  assert.equal(since(late), false);
+  assert.equal(since(early), true);
+  assert.equal(L.row({ n: 3, r: { at: 'soon' } }).cells.time, 'soon');
 });
 
 test('citlalpol.json: glyph rules each have a glyph, the last matches anything', () => {

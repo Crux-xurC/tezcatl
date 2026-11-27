@@ -38,6 +38,9 @@ test('refOf / line: the reference and what the receiving side says -- ids and ke
   assert.deepEqual(R.sound(ref), { kind: 'coord', type: 'calc_row', table: 'xipe_rows:all', ids: ['a1', 'a2'], cols: ['state'], scope: 'cell', panel: 'b1', name: 'matrix:all' });
   assert.equal(D.line(got), 'radar ── xipe_rows:all  calc_row ×2  [state]');
   assert.equal(D.line({ coord: coord(['a1'], { scope: 'row', cols: [] }), who: { id: 'b1', name: 'm' } }), 'radar ── xipe_rows:all  calc_row');
+  assert.equal(D.line({ coord: Object.assign(coord(['n1'], { scope: 'row', cols: [] }), { idsOf: 'node', type: 'function', table: 'cards:all' }), who: { id: 'b1', name: 'm' } }),
+    'radar ── cards:all  function (node ids)', 'what the ids are, when the table says');
+  assert.equal(D.sound(Object.assign(coord(['n1']), { idsOf: 'node' })).idsOf, 'node');
   assert.equal(R.text(ref), 'a1 a2');
   assert.equal(R.mark(ref), '@a1 a2');
 });

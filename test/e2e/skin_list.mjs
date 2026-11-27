@@ -68,6 +68,51 @@ const st = JSON.parse(await f.eval(`JSON.stringify(window.frameSkin.state())`));
 const got = JSON.stringify(st.columns.map((c) => c.map((x) => (Array.isArray(x) ? x[0] : x.panel)))) + ' ' + st.ratio.join(':');
 check(got === '[["tree"],["code_editor"]] 1:4', 'M-r: the frame reads it (skin.read) ── code_vi read as code_editor, ratios 1:4 -- ' + got);
 
-const errs = [p, w, f].flatMap((x) => x.logs.filter((l) => /exception/.test(l)));
+// inside a frame, Enter opens the skin in a new window -- that skin, not a copy of the frame's own
+// (a window opened gets a copy of its opener's sessionStorage, where the frame keeps its skin)
+const g = await openPage(PAGES + 'panels/skins/frame.html');
+await g.waitFor(`/ready|empty\\./.test(document.getElementById('recv').textContent)`, 15000);
+await g.eval(`document.getElementById('line').focus(); true`);
+await g.send('Input.insertText', { text: 'skin add skin_list' });
+await g.key('Enter', 'Enter', '\r');
+await g.waitFor(`window.frameSkin.frameAt('11') && /demo/.test(window.frameSkin.frameAt('11').contentDocument.body.textContent)`, 15000);
+await g.eval(`(() => { const d = window.frameSkin.frameAt('11').contentDocument; const fl = d.getElementById('filter'); window.frameSkin.frameAt('11').contentWindow.focus(); fl.focus(); fl.value = 'demo'; fl.dispatchEvent(new Event('input')); return true; })()`);
+await wait(300);
+await g.key('Enter', 'Enter', '\r');
+const dw = await attachTo('skin=demo', 10000);
+check(!!await dw.waitFor(`window.frameSkin && window.frameSkin.state() && window.frameSkin.state().name === 'demo'`, 15000),
+  'Enter inside a frame: the new window has the skin chosen, not the frame\'s -- ' + await dw.eval(`window.frameSkin && window.frameSkin.state().name`));
+await dw.eval(`document.getElementById('line').focus(); true`);
+await dw.send('Input.insertText', { text: 'skin name demo_mine' });
+await dw.key('Enter', 'Enter', '\r');
+await dw.waitFor(`window.frameSkin.state().name === 'demo_mine'`, 5000);
+await dw.eval(`location.reload(); true`);
+await wait(2500);
+check(!!await dw.waitFor(`window.frameSkin && window.frameSkin.state() && window.frameSkin.state().name === 'demo_mine'`, 15000), '...and its reload keeps what it became');
+
+// Del twice: a saved skin moved to ~work/old/skins/<name>-<time>.json and out of the list (D-old-place);
+// a shipped one is not moved
+console.log('skin_list: Del twice moves a saved skin to ~work/old/skins/');
+const filter = async (v) => { await p.eval(`(() => { const f = document.getElementById('filter'); f.focus(); f.value = ${JSON.stringify(v)}; f.dispatchEvent(new Event('input')); return true; })()`); await wait(300); };
+const foot = `document.body.textContent`;
+await filter(LATER);
+await p.key('Delete', 'Delete', '');
+check(!!await p.waitFor(`/Del again to move/.test(${foot})`, 5000), 'the first Del asks again');
+check(LATER in JSON.parse(fs.readFileSync(FILE, 'utf8')), '...and moves nothing yet');
+await p.key('Delete', 'Delete', '');
+const OLDDIR = path.join(E2E, 'work', 'old', 'skins');
+check(!!await p.waitFor(`${foot}.indexOf(${JSON.stringify('moved "' + LATER + '" to ~work/old/skins/')}) >= 0`, 8000), 'the second Del moves it, and says where');
+const moved = fs.existsSync(OLDDIR) ? fs.readdirSync(OLDDIR).filter((n) => n.startsWith(LATER + '-')) : [];
+check(moved.length === 1 && JSON.parse(fs.readFileSync(path.join(OLDDIR, moved[0]), 'utf8')).name === LATER, 'the file in ~work/old/skins/ is the skin -- ' + moved.join(','));
+check(!(LATER in JSON.parse(fs.readFileSync(FILE, 'utf8'))), 'it is out of the saved skins');
+await filter('');
+check(!!await p.waitFor(`document.body.textContent.indexOf(${JSON.stringify(LATER)}) < 0 || /moved/.test(${foot})`, 5000) &&
+  (await p.eval(`[...document.querySelectorAll('#list > *')].map((e) => e.textContent).join('|')`)).indexOf(LATER + '1 line') < 0, '...and out of the list');
+await filter('vibe_coding');
+await p.key('Delete', 'Delete', '');
+await p.key('Delete', 'Delete', '');
+check(!!await p.waitFor(`/shipped skins stay/.test(${foot})`, 5000), 'a shipped skin is not moved');
+
+const errs = [p, w, f, g].flatMap((x) => x.logs.filter((l) => /exception/.test(l)));
 check(errs.length === 0, 'no JS exceptions' + (errs.length ? ': ' + errs.join(' | ') : ''));
 done();

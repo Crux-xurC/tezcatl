@@ -1,0 +1,11 @@
+{
+  "name": "cards",
+  "desc": "Xipe Totec's functions with their node ids (card/list): v, radar, then effect/set id=@ … or dialogue do row/add node=@",
+  "source": { "xipe": "card/list" },
+  "from": "cards",
+  "id": "id",
+  "ids": "node",
+  "type": "function",
+  "columns": ["label", "effect", "effect_source", "rows", "path", "line", "id"],
+  "place": { "path": "path", "line": "line" }
+}

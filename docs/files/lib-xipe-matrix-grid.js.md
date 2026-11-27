@@ -4,7 +4,7 @@ The generic, backend-agnostic grid engine behind panels/resident/matrix.html (ma
 
 **Decisions homed here**: [D-matrix-shell](#d-matrix-shell), [D-matrix-csv](#d-matrix-csv)
 
-**Takes part in**: [D-references](lib-skin-recv-refs.js.md#d-references), [D-xipe-approval](lib-xipe-xipe-classes.js.md#d-xipe-approval)
+**Takes part in**: [D-references](lib-skin-recv-refs.js.md#d-references), [D-xipe-approval](lib-xipe-xipe-classes.js.md#d-xipe-approval), [D-matrix-raw](lib-xipe-matrix-kinds.js.md#d-matrix-raw)
 
 <a id="d-matrix-shell"></a>
 
@@ -20,6 +20,8 @@ them. How Xipe Totec's data is fetched and what it means are in an adapter per `
   `matrix.action {chord, selection}` was removed). What a key means is a translation layer's (`matrix_bindings.json`, empty for now)
 - **Colours are kept by row id and column key** (`~work/store/matrix-colors.json`, `D-store` = `{rowId: {colKey: "b"|"r"|"y"}}`), never
   by position — sorting and filtering would move colours to other cells
+- **A table with no adapter of code** is shown as it is (`json:`, `xipe_raw:`) or by a declaration
+  ([D-matrix-raw](lib-xipe-matrix-kinds.js.md#d-matrix-raw), 2026-11-26)
 - **Opened by the query only**: `matrix.html?kind=<adapter>&ref=<opaque reference>&root=<key of xipe.json>` (or
   `?path=<kind>:<ref>[@<root>]`); the shell does not read `ref`
 - **Read only**: the table changes no data. Changing data is a line handed to Xipe Totec — the dialogue window's, or the matrix_set's
@@ -30,7 +32,8 @@ them. How Xipe Totec's data is fetched and what it means are in an adapter per `
   2026-11-24): Citlalpol's records are append-only, so its rows are only added at the bottom and never change (colours and selection
   stay by row id; `p` pauses). `matrix.html` keeps `{kind, ref, root}`, takes `matrix.reload` / `matrix.load` and
   posts `matrix.loaded {kind, ref, root, ok, message, rows}` each time. The `matrix` skin (table + command line) has the commands
-  `matrix update` / `matrix get <path>` / `matrix pwd` (`lib/xipe/matrix-commands.js`), also tezcatl commands, and `matrix approve`
+  `matrix update` / `matrix get <path>` / `matrix pwd` / `matrix filter` / `matrix save-kind` / `matrix kinds` (`lib/xipe/matrix-commands.js`),
+  also tezcatl commands, and `matrix approve`
   ([D-xipe-approval](lib-xipe-xipe-classes.js.md#d-xipe-approval))
 - **Rows as sentences** (`kind=xipe_rows`, `lib/xipe/xipe-rows.js`): `row/list` once, one row a sentence (`Calc.add/2 (1, 2) → 5`).
   The data is asked of Xipe Totec, not read from its `book.jsonl` (outside the FS root; folding an append-only log and converting

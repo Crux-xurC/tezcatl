@@ -271,6 +271,10 @@
       "desc": "fetch the table shown again", "reply": "matrix.loaded" },
     { "name": "matrix.approve", "scope": "to", "from": "matrix_bar (matrix approve)", "to": "matrix.html of kind xipe_classes", "payload": "{}",
       "desc": "approve the classes of the rows selected (Xipe Totec's effect/approve), then fetch the table again (D-xipe-approval)", "reply": "matrix.loaded" },
+    { "name": "matrix.filter", "scope": "to", "from": "matrix_bar (matrix filter)", "to": "matrix.html", "payload": "{col, expr}",
+      "desc": "set the filter of a column (its key or label) as / does; an empty expr takes it away", "reply": "matrix.loaded" },
+    { "name": "matrix.save-kind", "scope": "to", "from": "matrix_bar (matrix save-kind)", "to": "matrix.html showing a table as it is (json:, xipe_raw:) or a declared one", "payload": "{name}",
+      "desc": "keep the table shown as a declared kind, ~work/matrix_kinds/<name>.json, never over one there (D-matrix-raw)", "reply": "matrix.loaded" },
     { "name": "matrix.table.open", "scope": "notice", "from": "the xipe_cards list kind", "to": "matrix.html", "payload": "{reqId, kind, ref}",
       "desc": "open this function's table", "reply": "matrix.table.opened" },
     { "name": "matrix.table.opened", "scope": "reply", "from": "matrix.html", "to": "the xipe_cards list kind", "payload": "{reqId}",
@@ -303,7 +307,7 @@
       "desc": "what the main of a synthesis keeps (a database window's number): the frame keeps it in the place's item, over a reload and in skin save, and gives it back as the main's query (D-synthesis)", "filter": "the frame: a place of its own whose main posts it (meta.from.name = <place id>.<main's k>)" },
 
 
-    { "name": "recv.say", "scope": "notice", "from": "code_editor, file_changes, juncture_tree, markdown, task_table, lib/core/commands.js", "to": "the frame's receiving side", "payload": "{text, [cls], [ref]}",
+    { "name": "recv.say", "scope": "notice", "from": "code_editor, file_changes, juncture_tree, markdown, task_table, matrix_bar (matrix kinds), lib/core/commands.js", "to": "the frame's receiving side", "payload": "{text, [cls], [ref]}",
       "desc": "what happened beside what was asked, with a reference (D-say-side-effects)", "filter": "frame: only from its own panels (ownPanel)" },
     { "name": "recv.out", "scope": "notice", "from": "the frame (every line its receiving side says)", "to": "run_table (a row sent to tezcatl), output_log, the frame source of output_target in another frame (lib/recv/frame.js)", "payload": "{text, cls}",
       "desc": "a line the frame said, as it said it", "filter": "run_table: only from the skin it is in" },
