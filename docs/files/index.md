@@ -363,6 +363,8 @@ decisions it takes part in. A record is under this directory; a decision is link
 | `input_target/emacs-vent.json` | Destination: Emacs through emacs-vent (`kind:"input"`). | [D-lead-key](lib-core-lead.js.md#d-lead-key), [D-unified-dock](lib-skin-frame-dock.js.md#d-unified-dock) |
 | `input_target/frame.json` | Destination: another frame (another tab or window), a line run there. | [D-bridge](lib-target-frame.js.md#d-bridge) |
 | `citlalpol.json` | Citlalpol in Tezcatl: how often citlalpol_bus reads, how many it keeps, the glyphs of citlalpol_image (rules on a record's fields). | [D-citlalpol-bus](lib-citlalpol-citlalpol-bus-page.js.md#d-citlalpol-bus) |
+| `assets/tezcatlipoca.png` | Tezcatl's emblem (the T in the sun ring, on a light disc so it reads on the image panel's black): what main.html's image panel and an image panel opened alone show (crux's picture). |  |
+| `favicon.ico` | The same emblem at 64, 48, 32 and 16 px. No page names it: a browser asks the page server for `/favicon.ico` by itself (Poca shows no favicons). |  |
 | `assets/citlalpol/` | The satellite, Venus, Zoozve and the Earth of citlalpol_image, and its flowing night sky (skyscape.webp) (crux's pictures, free to use). | [D-citlalpol-bus](lib-citlalpol-citlalpol-bus-page.js.md#d-citlalpol-bus) |
 | `input_target/xipe.json` | Destination: Xipe Totec (`input`, a line of characters). | [D-xipe-elsewhere](lib-xipe-xipe-line.js.md#d-xipe-elsewhere) |
 | `input_target/index.json` | The destinations of the lead-key input form (panels/extra/input_target.html; D-lead-key). | [D-lead-key](lib-core-lead.js.md#d-lead-key), [D-unified-dock](lib-skin-frame-dock.js.md#d-unified-dock) |
